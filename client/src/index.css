@@ -1,0 +1,9 @@
+@import "tailwindcss";
+
+@theme {
+  --font-heading: "Montserrat", sans-serif;
+  --font-body: "Roboto", sans-serif;
+  --color-primary: #ab26f2;
+  --color-secondary: #6366f1;
+  --color-accent: #bbea3a;
+}
