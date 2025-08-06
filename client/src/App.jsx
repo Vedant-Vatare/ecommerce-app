@@ -1,10 +1,9 @@
-import { useState } from "react";
-import "./App.css";
+import './App.css';
 
 function App() {
   return (
     <>
-      <div className="font-body">app</div>
+      <div className="bg-amber-100">app</div>
     </>
   );
 }
