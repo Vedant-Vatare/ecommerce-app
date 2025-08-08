@@ -24,6 +24,11 @@ export async function createUser(req, res) {
       message: 'User created successfully',
     });
   } catch (error) {
+    if (error.code === 'P2002') {
+      return res
+        .status(401)
+        .json({ success: false, message: 'user with email already exists' });
+    }
     return res
       .status(500)
       .json({ success: false, message: 'Internal Server Error' });

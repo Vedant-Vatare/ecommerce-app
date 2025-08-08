@@ -11,7 +11,6 @@ app.use(express.urlencoded({ extended: true }));
 app.use('/api/v1', rootRouter);
 
 app.use((err, req, res, next) => {
-  console.log(err.stack);
   res.status(err.status || 500).json({
     success: false,
     status: 'error',
