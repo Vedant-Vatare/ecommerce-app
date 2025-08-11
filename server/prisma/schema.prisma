@@ -15,6 +15,17 @@ model User {
   createdAt DateTime      @default(now())
   updatedAt DateTime      @updatedAt
   addresses UserAddress[]
+  Admin     Admin[]
+}
+
+model Admin {
+  id        String   @id @default(uuid())
+  userId    String
+  user      User?    @relation(fields: [userId], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId])
 }
 
 model UserAddress {
@@ -41,4 +52,6 @@ model Product {
   category    String?
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+
+  @@index([name, description])
 }

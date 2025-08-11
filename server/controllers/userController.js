@@ -71,3 +71,29 @@ export async function LoginUser(req, res) {
       .json({ success: false, message: 'Internal Server Error' });
   }
 }
+
+export async function createAdmin(req, res) {
+  try {
+    const { userId } = req.body;
+    const user = await prisma.user.findUnique({
+      where: { id: userId },
+    });
+
+    if (!user) {
+      return res.status(404).json({ message: 'User not found.' });
+    }
+
+    const admin = await prisma.admin.create({
+      data: {
+        userId: user.id,
+      },
+    });
+
+    return res.status(201).json({
+      message: 'Admin created successfully.',
+      admin,
+    });
+  } catch (error) {
+    return res.status(500).json({ message: 'Error creating admin.', error });
+  }
+}
