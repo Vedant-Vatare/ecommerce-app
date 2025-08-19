@@ -5,7 +5,10 @@ export async function validateCreateOrder(req, res, next) {
   try {
     const zodResponse = createOrderSchema.safeParse(req.body);
     if (!zodResponse.success) {
-      return res.status(400).json({ error: zodResponse.error.errors });
+      return res.status(400).json({
+        message: 'invalid order data',
+        error: zodResponse.error,
+      });
     }
 
     const userOrderProducts = zodResponse.data.orderItems;
