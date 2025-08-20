@@ -25,7 +25,7 @@ router.post(
 
 router.get('/:id', asyncHandler(getProductById));
 router.get('/bulk/:search', asyncHandler(getProductsBySearch));
-router.put(
+router.patch(
   '/:id',
   authenticateAdmin,
   upload.array('images'),
