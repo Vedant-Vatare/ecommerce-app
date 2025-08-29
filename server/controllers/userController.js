@@ -241,3 +241,98 @@ export async function deleteUserAddress(req, res) {
     });
   }
 }
+
+export async function addProductToWishlist(req, res) {
+  const { id } = req.params;
+  const userId = req.userId;
+
+  if (!id) {
+    return res.status(401).json({ message: 'product id is required' });
+  }
+
+  try {
+    const product = await prisma.product.findUnique({
+      where: { id },
+    });
+
+    if (!product) {
+      return res.status(404).json({ message: 'Product not found.' });
+    }
+
+    const wishlistItem = await prisma.wishlist.create({
+      data: {
+        userId,
+        productId: id,
+      },
+      include: { product: true },
+    });
+
+    res.status(201).json({
+      message: 'Product added to wishlist successfully.',
+      wishlistItem,
+    });
+  } catch (error) {
+    if (error.code === 'P2002') {
+      return res
+        .status(409)
+        .json({ message: 'Product is already in wishlist.' });
+    }
+
+    res.status(500).json({
+      message: 'Error adding product to wishlist.',
+      error: error.message,
+    });
+  }
+}
+
+export async function getUserWishlist(req, res) {
+  try {
+    const wishlist = await prisma.wishlist.findMany({
+      where: { userId: req.userId },
+      include: { product: true },
+    });
+
+    res.status(200).json({
+      message: 'User wishlist fetched successfully.',
+      wishlist,
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: 'Error fetching user wishlist.',
+      error: error.message,
+    });
+  }
+}
+
+export async function deleteUserWishlist(req, res) {
+  const { id } = req.params;
+  if (!id) {
+    return res.status(401).json({ message: 'Product id is required' });
+  }
+
+  try {
+    const wishlistItem = await prisma.wishlist.findUnique({
+      where: {
+        id,
+        userId: req.userId,
+      },
+    });
+
+    if (!wishlistItem) {
+      return res.status(404).json({ message: 'Wishlist item not found.' });
+    }
+
+    await prisma.wishlist.delete({
+      where: { id },
+    });
+
+    res.status(200).json({
+      message: 'Product was removed from wishlist .',
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: 'Error removing product from wishlist.',
+      error: error.message,
+    });
+  }
+}

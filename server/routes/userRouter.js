@@ -7,6 +7,9 @@ import {
   getUserAllAddresses,
   LoginUser,
   updateUserAddress,
+  addProductToWishlist,
+  getUserWishlist,
+  deleteUserWishlist,
 } from '../controllers/userController.js';
 import {
   validateCreateAddress,
@@ -38,6 +41,19 @@ router.delete(
   '/address/:id',
   authenticateUser,
   asyncHandler(deleteUserAddress),
+);
+
+router.post(
+  '/wishlist/:id',
+  authenticateUser,
+  asyncHandler(addProductToWishlist),
+);
+
+router.get('/wishlist', authenticateUser, asyncHandler(getUserWishlist));
+router.delete(
+  '/wishlist/:id',
+  authenticateUser,
+  asyncHandler(deleteUserWishlist),
 );
 
 export default router;

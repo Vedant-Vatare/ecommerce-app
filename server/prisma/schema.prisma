@@ -18,6 +18,7 @@ model User {
   Admin     Admin[]
   UserCart  UserCart[]
   Order     Order[]
+  Wishlist  Wishlist[]
 }
 
 model Admin {
@@ -58,8 +59,20 @@ model Product {
   updatedAt   DateTime    @updatedAt
   UserCart    UserCart[]
   OrderItem   OrderItem[]
+  Wishlist    Wishlist[]
 
   @@index([name, description])
+}
+
+model Wishlist {
+  id        String   @id @default(uuid())
+  userId    String
+  productId String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+
+  @@unique([userId, productId])
 }
 
 model UserCart {
