@@ -1,11 +1,7 @@
 import './App.css';
 
 function App() {
-  return (
-    <>
-      <div className="bg-amber-100">app</div>
-    </>
-  );
+  return <></>;
 }
 
 export default App;
