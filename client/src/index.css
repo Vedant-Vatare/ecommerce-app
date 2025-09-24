@@ -1,5 +1,9 @@
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&family=Playfair+Display:wght@400;700&family=Roboto+Mono&display=swap');
 @import 'tailwindcss';
+
+@theme {
+  --font-heading: 'Montserrat', ui-sans-serif, sans-serif;
+  --font-body: 'Open Sans', ui-sans-serif, sans-serif;
+}
 
 :root {
   --background: oklch(1 0 0);
@@ -34,9 +38,25 @@
   --sidebar-accent-foreground: oklch(0.2077 0.0398 265.7549);
   --sidebar-border: oklch(0.9288 0.0126 255.5078);
   --sidebar-ring: oklch(0.7107 0.0351 256.7878);
-  --font-sans: Poppins, ui-sans-serif, sans-serif, system-ui;
-  --font-serif: Playfair Display, ui-serif, serif;
-  --font-mono: Roboto Mono, monospace;
+  --gradient-primary: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+  --gradient-secondary: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%);
+  --gradient-accent: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
+  --gradient-success: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  --gradient-hero: linear-gradient(135deg, #1e40af 0%, #3730a3 100%);
+  --success: #10b981;
+  --success-foreground: #ffffff;
+  --success-light: #d1fae5;
+  --warning: #f59e0b;
+  --warning-foreground: #ffffff;
+  --warning-light: #fef3c7;
+  --info: #3b82f6;
+  --info-foreground: #ffffff;
+  --info-light: #dbeafe;
+  --font-sans: 'Open Sans', ui-sans-serif, sans-serif, system-ui;
+  --font-serif: 'Montserrat', sans-serif, ui-serif, serif;
+  --font-mono: 'Open Sans', ui-sans-serif, sans-serif, system-ui;
+  --font-heading: 'Montserrat', ui-sans-serif, sans-serif;
+  --font-body: 'Open Sans', ui-sans-serif, sans-serif;
   --radius: 0.75rem;
   --shadow-2xs: 0px 2px 4px 0px hsl(0 0% 0% / 0.03);
   --shadow-xs: 0px 2px 4px 0px hsl(0 0% 0% / 0.03);
@@ -88,9 +108,6 @@
   --sidebar-accent-foreground: oklch(0.9842 0.0034 247.8575);
   --sidebar-border: oklch(0.2739 0.0055 286.0326);
   --sidebar-ring: oklch(0.6231 0.188 259.8145);
-  --font-sans: Poppins, ui-sans-serif, sans-serif, system-ui;
-  --font-serif: Playfair Display, ui-serif, serif;
-  --font-mono: Roboto Mono, monospace;
   --radius: 0.75rem;
   --shadow-2xs: 0px 2px 4px 0px hsl(0 0% 0% / 0.05);
   --shadow-xs: 0px 2px 4px 0px hsl(0 0% 0% / 0.05);
@@ -169,4 +186,15 @@
 
 body {
   letter-spacing: var(--tracking-normal);
+  font-family: var(--font-sans);
+}
+
+svg {
+  min-width: 1rem;
+  min-height: 1rem;
+  display: inline-block;
+  vertical-align: middle;
+  stroke-width: 1.35px;
+  stroke-linecap: round;
+  stroke-linejoin: round;
 }
