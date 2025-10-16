@@ -6,7 +6,7 @@ const RootLayout = () => {
   return (
     <>
       <RootHeaderLayout />
-      <main>
+      <main className="pb-[80px] md:pb-0">
         <Outlet />
       </main>
       <MobileNavigationLayout />

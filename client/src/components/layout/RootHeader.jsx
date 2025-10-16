@@ -1,46 +1,42 @@
 import { Search, ShoppingBagIcon, User2 } from 'lucide-react';
 import { Link } from 'react-router-dom';
-
+import logo from '@/assets/logo.png';
 const RootHeaderLayout = () => {
   return (
-    <header className="shadow-md max-h-14 h-14 sticky top-0 bg-white z-[99999]">
-      <div className="flex w-full items-center justify-between md:px-8 px-1 h-full">
-        <div className="h-full flex items-center">
-          <div className="md:h-14 md:w-48 w-36 grid place-items-center">
-            <img
-              className="object-cover"
-              src="/Sticker-Studio.png"
-              alt="Sticker studio"
-            />
+    <header className="sticky top-0 z-[99999] h-14 max-h-14 bg-white shadow-md">
+      <div className="flex h-full w-full items-center justify-between gap-2 px-1">
+        <div className="flex h-full items-center">
+          <div className="grid w-36 place-items-center md:h-14 md:w-48">
+            <img className="object-cover" src={logo} alt="Sticker studio" />
           </div>
         </div>
-        <div className="md:flex hidden gap-12 items-center font-semibold font-heading">
-          <span>
+        <div className="font-heading hidden w-max items-center gap-12 md:flex">
+          <span className="w-max">
             <Link to="/">Home</Link>
           </span>
-          <span>
+          <span className="w-max">
             <Link to="/shop">Collections</Link>
           </span>
-          <span>
+          <span className="w-max">
             <Link to="/contact">Contact Us</Link>
           </span>
         </div>
 
-        <div className="flex gap-3 items-center mr-3">
-          <div className="relative grid place-items-center max-w-80  min-w-24  h-full ">
+        <div className="mr-3 flex items-center gap-3">
+          <div className="relative grid h-full min-w-24 max-w-80 place-items-center">
             <input
               type="text"
               name="search"
               placeholder="Search"
-              className="font-heading font-medium p-4 w-full h-full max-h-6 rounded-sm border border-gray-300 px-4 focus:outline-none focus:ring-2 focus:ring-accent"
+              className="focus:ring-accent h-9 w-full rounded-sm border border-gray-300 p-4 px-4 font-sans font-medium focus:outline-none focus:ring-2"
             />
-            <Search className="w-max h-[90%] absolute right-2 p-2 cursor-pointer bg-accent" />
+            <Search className="absolute right-2 h-[90%] w-max cursor-pointer rounded-full bg-white p-2" />
           </div>
-          <span className="inline-flex items-center justify-center w-10 h-10 rounded-full bg-accent cursor-pointer">
-            <ShoppingBagIcon className="w-5 h-5" />
+          <span className="bg-primary-foreground inline-flex aspect-square h-10 w-10 cursor-pointer items-center justify-center rounded-full">
+            <ShoppingBagIcon className="h-5 w-5" />
           </span>
-          <span className="md:inline-flex hidden items-center justify-center w-10 h-10 rounded-full bg-accent cursor-pointer">
-            <User2 className="w-5 h-5" />
+          <span className="hidden aspect-square h-10 w-10 cursor-pointer items-center justify-center rounded-full bg-white md:inline-flex">
+            <User2 className="h-5 w-5" />
           </span>
         </div>
       </div>

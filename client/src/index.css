@@ -1,8 +1,11 @@
 @import 'tailwindcss';
+@import 'tw-animate-css';
+
+@custom-variant dark (&:is(.dark *));
 
 @theme {
-  --font-heading: 'Montserrat', ui-sans-serif, sans-serif;
-  --font-body: 'Open Sans', ui-sans-serif, sans-serif;
+  --font-heading: 'Poppins', ui-sans-serif, system-ui, sans-serif;
+  --font-body: 'Lato', ui-sans-serif, system-ui, sans-serif;
 }
 
 :root {
@@ -13,7 +16,7 @@
   --popover: oklch(1 0 0);
   --popover-foreground: oklch(0.1363 0.0364 259.201);
   --primary: oklch(0.5461 0.2152 262.8809);
-  --primary-foreground: oklch(1 0 0);
+  --primary-foreground: oklch(98.686% 0.0026 230.456);
   --secondary: oklch(0.9683 0.0069 247.8956);
   --secondary-foreground: oklch(0.2077 0.0398 265.7549);
   --muted: oklch(0.9683 0.0069 247.8956);
@@ -52,11 +55,13 @@
   --info: #3b82f6;
   --info-foreground: #ffffff;
   --info-light: #dbeafe;
-  --font-sans: 'Open Sans', ui-sans-serif, sans-serif, system-ui;
-  --font-serif: 'Montserrat', sans-serif, ui-serif, serif;
-  --font-mono: 'Open Sans', ui-sans-serif, sans-serif, system-ui;
-  --font-heading: 'Montserrat', ui-sans-serif, sans-serif;
-  --font-body: 'Open Sans', ui-sans-serif, sans-serif;
+
+  @theme {
+    --font-sans: 'Lato', ui-sans-serif, system-ui, sans-serif;
+    --font-serif: 'Poppins', ui-sans-serif, system-ui, sans-serif;
+    --font-mono: ui-monospace, monospace;
+  }
+
   --radius: 0.75rem;
   --shadow-2xs: 0px 2px 4px 0px hsl(0 0% 0% / 0.03);
   --shadow-xs: 0px 2px 4px 0px hsl(0 0% 0% / 0.03);
@@ -183,12 +188,31 @@
   --tracking-wider: calc(var(--tracking-normal) + 0.05em);
   --tracking-widest: calc(var(--tracking-normal) + 0.1em);
 }
+@keyframes moveGradient {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
 
 body {
   letter-spacing: var(--tracking-normal);
   font-family: var(--font-sans);
 }
-
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: 'Poppins', ui-sans-serif, system-ui, sans-serif;
+  font-weight: 600;
+}
 svg {
   min-width: 1rem;
   min-height: 1rem;
@@ -197,4 +221,28 @@ svg {
   stroke-width: 1.35px;
   stroke-linecap: round;
   stroke-linejoin: round;
+}
+.section-title,
+.page-title {
+  font-size: 1.875rem;
+  line-height: 2.25rem;
+  margin-bottom: 1.5rem;
+  font-weight: 600;
+}
+
+@media (max-width: 768px) {
+  .section-title,
+  .page-title {
+    font-size: 1.25rem;
+    line-height: 2rem;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
 }
