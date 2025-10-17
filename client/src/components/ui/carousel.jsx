@@ -46,7 +46,6 @@ function Carousel({
   const [scrollSnaps, setScrollSnaps] = React.useState([]);
   const [isHovered, setIsHovered] = React.useState(false);
   const [isFocused, setIsFocused] = React.useState(false);
-  const [isPointerDown, setIsPointerDown] = React.useState(false);
 
   const onSelect = React.useCallback((api) => {
     if (!api) return;

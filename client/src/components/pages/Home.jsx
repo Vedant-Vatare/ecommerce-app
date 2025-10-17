@@ -9,13 +9,15 @@ import {
 import { TextEffect } from '../ui/text-effect';
 import { heroImages } from '@/utils/images';
 import { trendingCategoryImages } from '@/utils/images';
+import { featuredImages } from '@/utils/images';
+import ProductGrid from '../product/ProductGrid';
 
 const HomePage = () => {
   return (
     <div className="bg-white">
-      <div className="min-h-screen w-full bg-[#f9fafb] relative">
+      <div className="relative min-h-screen w-full bg-[#f9fafb]">
         <div
-          className="absolute h-screen w-screen opacity-55 z-0  pointer-events-none"
+          className="pointer-events-none absolute z-0 h-screen w-full opacity-45"
           style={{
             backgroundImage: `
       linear-gradient(to right, #d1d5db 1px, transparent 1px),
@@ -30,9 +32,10 @@ const HomePage = () => {
             WebkitMaskRepeat: 'no-repeat',
           }}
         />
-        <div className="relative w-full max-w-6xl mx-auto px-4 lg:px-8 ">
+        <div className="relative mx-auto flex w-full max-w-6xl flex-col px-2 lg:px-8">
           <HeroSection />
           <TrendingCategories />
+          <FeaturedProducts />
         </div>
       </div>
     </div>
@@ -42,27 +45,27 @@ const HomePage = () => {
 const HeroSection = () => {
   return (
     <>
-      <div className="min-h-max flex pb-10">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-start w-full max-w-7xl py-12">
+      <div className="flex min-h-max pb-10">
+        <div className="grid w-full max-w-7xl grid-cols-1 items-start gap-12 py-12 lg:grid-cols-2 lg:gap-16">
           <div className="space-y-6">
-            <h1 className="text-5xl xl:text-7xl font-bold tracking-tight mt-3">
+            <h1 className="mt-3 text-5xl font-bold tracking-tight xl:text-7xl">
               <TextEffect preset="slide" per="char">
                 Stick Your Personality Everywhere
               </TextEffect>
             </h1>
-            <p className="text-xl text-gray-600 leading-relaxed">
+            <p className="text-xl leading-relaxed text-gray-600">
               Buy the perfect stickers to make your world uniquely yours.
             </p>
             <div className="pt-2">
               <Button
                 size="lg"
-                className="bg-primary hover:bg-primary/90 text-lg px-8 py-6"
+                className="bg-primary hover:bg-primary/90 px-8 py-6 text-lg"
               >
                 Shop Now
               </Button>
             </div>
           </div>
-          <div className="w-full max-w-64 mx-auto lg:mx-0 lg:ml-auto lg:top-20 relative">
+          <div className="relative mx-auto w-full max-w-64 lg:top-20 lg:mx-0 lg:ml-auto">
             <Carousel
               autoplay={true}
               autoplayInterval={2500}
@@ -75,7 +78,7 @@ const HeroSection = () => {
                     <img
                       src={image}
                       alt={`Hero image ${index + 1}`}
-                      className="w-full h-auto object-contain"
+                      className="h-auto w-full object-contain"
                     />
                   </CarouselItem>
                 ))}
@@ -90,39 +93,48 @@ const HeroSection = () => {
 
 const TrendingCategories = () => {
   return (
-    <div className="py-12 overflow-hidden">
+    <div className="mt-12">
       <h2 className="section-title mb-8 text-center">Trending Categories</h2>
       <div className="relative">
-        <Carousel className="w-full">
-          <CarouselContent className="-ml-2 md:-ml-4">
-            {Object.entries(trendingCategoryImages).map(
-              ([name, image], index) => (
+        <Carousel>
+          <CarouselContent>
+            {trendingCategoryImages.map((category, index) => {
+              const [name, imgSrc] = Object.entries(category)[0];
+              return (
                 <CarouselItem
                   key={index}
-                  className="pl-2 md:pl-4 basis-1/2 sm:basis-1/3 md:basis-1/4 lg:basis-1/5 lg:mx-1"
+                  className="basis-1/2 py-2 pl-2 sm:basis-1/3 md:basis-1/4 md:pl-4 lg:mx-1 lg:basis-1/5"
                 >
-                  <div className="space-y-2">
-                    <div className="aspect-square w-full overflow-hidden rounded-lg">
+                  <div className="outline-foreground cursor-pointer space-y-2 transition-transform duration-300 hover:scale-110">
+                    <div className="aspect-square w-full rounded-lg">
                       <img
-                        src={image}
+                        src={imgSrc}
                         alt={name}
-                        className="w-full h-full object-cover"
+                        className="h-full w-full object-cover"
                       />
                     </div>
-                    <h3 className="text-sm md:text-base font-semibold text-center line-clamp-2">
+                    <span className="font-body line-clamp-2 text-center text-sm font-medium capitalize md:text-base">
                       {name}
-                    </h3>
+                    </span>
                   </div>
                 </CarouselItem>
-              ),
-            )}
+              );
+            })}
           </CarouselContent>
-          <CarouselPrevious className="md:flex" />
-          <CarouselNext className="md:flex" />
+          <CarouselPrevious className="absolute left-0" />
+          <CarouselNext className="absolute right-0" />
         </Carousel>
       </div>
     </div>
   );
 };
 
+const FeaturedProducts = () => {
+  return (
+    <div className="mt-24">
+      <h2 className="section-title text-center">Featured Stickers</h2>
+      <ProductGrid products={featuredImages} show />
+    </div>
+  );
+};
 export default HomePage;
