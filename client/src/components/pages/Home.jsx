@@ -1,4 +1,5 @@
 import { Button } from '@/components/ui/button';
+import { ChevronsRightIcon } from 'lucide-react';
 import {
   Carousel,
   CarouselContent,
@@ -7,10 +8,14 @@ import {
   CarouselNext,
 } from '../ui/carousel';
 import { TextEffect } from '../ui/text-effect';
-import { heroImages } from '@/utils/images';
-import { trendingCategoryImages } from '@/utils/images';
-import { featuredImages } from '@/utils/images';
+import {
+  heroImages,
+  topSellingProducts,
+  trendingCategoryImages,
+  featuredProducts,
+} from '@/utils/images';
 import ProductGrid from '../product/ProductGrid';
+import { ReviewsCarousel } from '../user/Reviews';
 
 const HomePage = () => {
   return (
@@ -32,10 +37,12 @@ const HomePage = () => {
             WebkitMaskRepeat: 'no-repeat',
           }}
         />
-        <div className="relative mx-auto flex w-full max-w-6xl flex-col px-2 lg:px-8">
+        <div className="relative mx-auto mb-10 flex w-full max-w-6xl flex-col px-2 lg:px-8">
           <HeroSection />
           <TrendingCategories />
           <FeaturedProducts />
+          <TopSellingProducts />
+          <Testimonials />
         </div>
       </div>
     </div>
@@ -94,7 +101,7 @@ const HeroSection = () => {
 const TrendingCategories = () => {
   return (
     <div className="mt-12">
-      <h2 className="section-title mb-8 text-center">Trending Categories</h2>
+      <h2 className="section-title text-center">Trending Categories</h2>
       <div className="relative">
         <Carousel>
           <CarouselContent>
@@ -103,19 +110,19 @@ const TrendingCategories = () => {
               return (
                 <CarouselItem
                   key={index}
-                  className="basis-1/2 py-2 pl-2 sm:basis-1/3 md:basis-1/4 md:pl-4 lg:mx-1 lg:basis-1/5"
+                  className="mx-1 basis-1/2 py-2 pl-2 sm:basis-1/3 md:basis-1/4 md:pl-4 lg:mx-1 lg:basis-1/5"
                 >
-                  <div className="outline-foreground cursor-pointer space-y-2 transition-transform duration-300 hover:scale-110">
-                    <div className="aspect-square w-full rounded-lg">
+                  <div className="outline-foreground cursor-pointer space-y-2">
+                    <span className="font-body mb-5 line-clamp-2 text-center text-sm font-medium capitalize md:text-base">
+                      {name}
+                    </span>
+                    <div className="aspect-square w-full rounded-lg transition-transform duration-300 hover:scale-110">
                       <img
                         src={imgSrc}
                         alt={name}
                         className="h-full w-full object-cover"
                       />
                     </div>
-                    <span className="font-body line-clamp-2 text-center text-sm font-medium capitalize md:text-base">
-                      {name}
-                    </span>
                   </div>
                 </CarouselItem>
               );
@@ -132,8 +139,37 @@ const TrendingCategories = () => {
 const FeaturedProducts = () => {
   return (
     <div className="mt-24">
-      <h2 className="section-title text-center">Featured Stickers</h2>
-      <ProductGrid products={featuredImages} show />
+      <div className="mb-3 flex items-center justify-between">
+        <h2 className="section-title">Featured Stickers</h2>
+        <Button variant={'outline'} className="group ml-auto flex items-center">
+          View All
+          <ChevronsRightIcon className="inline-block h-4 w-4 transition-transform group-hover:translate-x-1" />
+        </Button>
+      </div>
+      <ProductGrid products={featuredProducts} showAddToCartBtn={true} />
+    </div>
+  );
+};
+
+const TopSellingProducts = () => {
+  return (
+    <div className="mt-24">
+      <div className="mb-3 flex items-center justify-between">
+        <h2 className="section-title">Top Selling Stickers</h2>
+        <Button variant={'outline'} className="group ml-auto flex items-center">
+          View All
+          <ChevronsRightIcon className="inline-block h-4 w-4 transition-transform group-hover:translate-x-1" />
+        </Button>
+      </div>
+      <ProductGrid products={topSellingProducts} showAddToCartBtn={true} />
+    </div>
+  );
+};
+const Testimonials = () => {
+  return (
+    <div className="mt-24">
+      <h2 className="section-title text-center">What Our Customers Say</h2>
+      <ReviewsCarousel />
     </div>
   );
 };

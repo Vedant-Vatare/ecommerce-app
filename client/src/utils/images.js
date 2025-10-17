@@ -19,20 +19,24 @@ import featuredImage7 from '../assets/home/featured/featured-7.png';
 import featuredImage8 from '../assets/home/featured/featured-8.png';
 import featuredImage9 from '../assets/home/featured/featured-9.png';
 import featuredImage10 from '../assets/home/featured/featured-10.png';
+import topSellingImage1 from '../assets/home/top-selling/top-selling-1.webp';
+import topSellingImage2 from '../assets/home/top-selling/top-selling-2.jpg';
+import topSellingImage3 from '../assets/home/top-selling/top-selling-3.webp';
+import topSellingImage4 from '../assets/home/top-selling/top-selling-4.webp';
 
 export const heroImages = [heroImage1, heroImage2, heroImage3, heroImage4];
 
 export const trendingCategoryImages = [
-  { 'motivational Sticker': trendingMotivationImage },
-  { 'anime Sticker': trendingAnimeImage },
-  { 'coding Sticker': trendingCodingImage },
-  { 'animal Sticker': trendingAnimalImage },
-  { 'cool Sticker': trendingCoolImage },
-  { 'seasonal Sticker': trendingSeasonalImage },
-  { 'popCulture Sticker': trendingPopCultureImage },
+  { 'Motivational Sticker': trendingMotivationImage },
+  { 'Anime Sticker': trendingAnimeImage },
+  { 'Coding Sticker': trendingCodingImage },
+  { 'Animal Sticker': trendingAnimalImage },
+  { 'Cool Sticker': trendingCoolImage },
+  { 'Seasonal Sticker': trendingSeasonalImage },
+  { 'Pop Culture Sticker': trendingPopCultureImage },
 ];
 
-export const featuredImages = [
+export const featuredProducts = [
   {
     name: 'Halloween Sticker Pack',
     alt: 'Halloween Sticker Pack with spooky designs',
@@ -82,13 +86,40 @@ export const featuredImages = [
     price: '449',
   },
   {
-    name: 'hand-drawn trendy cartoon badges collection too much text to show ',
+    name: 'hand-drawn trendy cartoon badges collection',
     image: featuredImage9,
     price: '99',
   },
   {
-    name: 'Featured Image 10',
+    name: 'motivational quotes sticker pack',
     image: featuredImage10,
     price: '999',
+  },
+];
+
+export const topSellingProducts = [
+  {
+    name: 'bold but Kind sticker',
+    alt: 'bold but Kind sticker',
+    image: topSellingImage1,
+    price: '399',
+  },
+  {
+    name: 'No weakness just power sticker',
+    alt: 'No weakness just power sticker ',
+    image: topSellingImage2,
+    price: '399',
+  },
+  {
+    name: 'Great things take time sticker',
+    alt: 'Great things take time sticker',
+    image: topSellingImage3,
+    price: '399',
+  },
+  {
+    name: 'Skull sticker | killdeath',
+    alt: 'bold but Kind sticker with motivational designs',
+    image: topSellingImage4,
+    price: '399',
   },
 ];
