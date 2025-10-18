@@ -1,11 +1,16 @@
 import { Button } from '../ui/button';
-
+import { motion } from 'motion/react';
 const ProductGrid = ({ products, showDescription, showAddToCartBtn }) => (
   <div className="grid w-full grid-cols-2 justify-items-center gap-2 gap-y-7 sm:grid-cols-3 sm:gap-6 md:grid-cols-4">
     {products.map((product, index) => (
-      <div
+      <motion.div
         key={index}
         className="outline-foreground flex h-full w-full cursor-pointer flex-col items-center justify-between rounded-sm p-2 transition-transform duration-300 hover:scale-105 hover:outline-1"
+        initial={{ opacity: 0, y: 10 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, amount: 0.1 }}
+        transition={{ delay: Math.min(index * 0.05, 2) }}
+        whileHover={{ y: -5 }}
       >
         <div className="bg-muted relative flex aspect-square w-full items-center justify-center overflow-hidden rounded-md">
           <img
@@ -36,7 +41,7 @@ const ProductGrid = ({ products, showDescription, showAddToCartBtn }) => (
             Add to Cart
           </Button>
         )}
-      </div>
+      </motion.div>
     ))}
   </div>
 );

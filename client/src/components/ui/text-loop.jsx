@@ -1,4 +1,4 @@
-'use client';;
+'use client';
 import { cn } from '@/lib/utils';
 import { motion, AnimatePresence } from 'motion/react';
 import { useState, useEffect, Children } from 'react';
@@ -11,7 +11,7 @@ export function TextLoop({
   variants,
   onIndexChange,
   trigger = true,
-  mode = 'popLayout'
+  mode = 'popLayout',
 }) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const items = Children.toArray(children);
@@ -41,11 +41,12 @@ export function TextLoop({
       <AnimatePresence mode={mode} initial={false}>
         <motion.div
           key={currentIndex}
-          initial='initial'
-          animate='animate'
-          exit='exit'
+          initial="initial"
+          animate="animate"
+          exit="exit"
           transition={transition}
-          variants={variants || motionVariants}>
+          variants={variants || motionVariants}
+        >
           {items[currentIndex]}
         </motion.div>
       </AnimatePresence>

@@ -1,4 +1,4 @@
-'use client';;
+'use client';
 import { motion } from 'motion/react';
 import React from 'react';
 
@@ -81,7 +81,7 @@ function AnimatedGroup({
   variants,
   preset,
   as = 'div',
-  asChild = 'div'
+  asChild = 'div',
 }) {
   const selectedVariants = {
     item: addDefaultVariants(preset ? presetVariants[preset] : {}),
@@ -95,10 +95,11 @@ function AnimatedGroup({
 
   return (
     <MotionComponent
-      initial='hidden'
-      animate='visible'
+      initial="hidden"
+      animate="visible"
       variants={containerVariants}
-      className={className}>
+      className={className}
+    >
       {React.Children.map(children, (child, index) => (
         <MotionChild key={index} variants={itemVariants}>
           {child}

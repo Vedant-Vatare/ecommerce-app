@@ -10,14 +10,13 @@
 
 :root {
   --background: oklch(1 0 0);
-  --foreground: oklch(0.1363 0.0364 259.201);
+  --foreground: oklch(23.929% 0.00003 271.152);
   --card: oklch(1 0 0);
   --card-foreground: oklch(0.1363 0.0364 259.201);
   --popover: oklch(1 0 0);
   --popover-foreground: oklch(0.1363 0.0364 259.201);
   --primary: oklch(0.5461 0.2152 262.8809);
   --primary-foreground: oklch(98.686% 0.0026 230.456);
-  --secondary: oklch(0.9683 0.0069 247.8956);
   --secondary-foreground: oklch(0.2077 0.0398 265.7549);
   --muted: oklch(0.9683 0.0069 247.8956);
   --muted-foreground: oklch(0.5544 0.0407 257.4166);
@@ -230,7 +229,6 @@ img {
 .page-title {
   font-size: 1.875rem;
   line-height: 2.25rem;
-  margin-bottom: 1.5rem;
   font-weight: 600;
 }
 
