@@ -6,7 +6,6 @@ export async function getUserCart(req, res) {
       where: { userId: req.userId },
       select: {
         id: true,
-        userId: true,
         quantity: true,
         product: {
           select: {
@@ -19,6 +18,7 @@ export async function getUserCart(req, res) {
           },
         },
       },
+      orderBy: { createdAt: 'desc' },
     });
     if (!cart) {
       return res.status(404).json({ message: 'Cart not found' });
@@ -44,6 +44,7 @@ export async function addToCart(req, res) {
         productId: productId,
         quantity: 1,
       },
+      include: { product: true },
     });
     res.status(201).json({ message: 'Product added to cart', cartItem });
   } catch (e) {
@@ -83,7 +84,7 @@ export async function updateCartItem(req, res) {
 
 export async function removeFromCart(req, res) {
   try {
-    const { cartItemId } = req.body;
+    const cartItemId = req.body.cartItemId;
     if (!cartItemId) {
       return res.status(400).json({ message: 'invalid cart item id' });
     }
