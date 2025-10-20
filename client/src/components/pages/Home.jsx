@@ -17,7 +17,6 @@ import {
 } from '@/utils/images';
 import ProductGrid from '../product/ProductGrid';
 import { ReviewsCarousel } from '../user/Reviews';
-import Footer from '../Footer';
 
 const fadeInUp = {
   hidden: { opacity: 0, y: 20 },
@@ -68,7 +67,6 @@ const HomePage = () => {
           <Testimonials />
         </div>
       </div>
-      <Footer />
     </div>
   );
 };

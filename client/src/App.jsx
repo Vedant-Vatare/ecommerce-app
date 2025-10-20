@@ -1,8 +1,10 @@
+import { lazy } from 'react';
 import './App.css';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import RootLayout from './components/layout/RootLayout';
 import Home from './components/pages/Home';
 import Cart from './components/pages/Cart';
+const ServerError = lazy(() => import('./components/pages/ServerError'));
 
 function App() {
   return (
@@ -13,6 +15,7 @@ function App() {
           <Route path="/shop" element={<>Shop</>} />
           <Route path="/account" element={<>Account</>} />
           <Route path="/cart" element={<Cart />} />
+          <Route path="/server-error" element={<ServerError />} />
         </Route>
       </Routes>
     </BrowserRouter>

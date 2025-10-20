@@ -1,26 +1,24 @@
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
-import { Trash2, Plus, Minus } from 'lucide-react';
+import { Link } from 'react-router-dom';
+import { X, Plus, Minus } from 'lucide-react';
 import {
   useCartQuery,
   useDeleteCartItemQuery,
   useUpdateCartItemQuery,
 } from '@/hooks/cart';
-import Footer from '../Footer';
+import ServerError from './ServerError';
 
 const Cart = () => {
-  const { data: cartItems, isLoading } = useCartQuery();
+  const { data: cartItems, isLoading, isError } = useCartQuery();
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return <div>loading</div>;
   }
 
-  const subtotal = cartItems.reduce(
-    (sum, item) => sum + item.product.price * item.quantity,
-    0,
-  );
-  const shipping = subtotal > 1000 ? 0 : 99;
-  const total = subtotal + shipping;
+  if (isError) {
+    return <ServerError />;
+  }
 
   return (
     <>
@@ -33,41 +31,38 @@ const Cart = () => {
           <div className="mb-8">
             <h1 className="text-foreground page-title">
               Shopping Cart
-              {cartItems.length > 0 && (
+              {cartItems?.length > 0 && (
                 <p className="ml-1 inline opacity-80">({cartItems.length})</p>
               )}
             </h1>
           </div>
 
-          {cartItems.length === 0 ? (
+          {cartItems?.length === 0 ? (
             <Card className="flex flex-col items-center justify-center py-16">
               <p className="text-muted-foreground text-lg">
                 Your cart is empty
               </p>
-              <Button className="mt-4">Continue Shopping</Button>
+              <Link to="/">
+                <Button>Continue Shopping</Button>
+              </Link>
             </Card>
           ) : (
             <div className="grid gap-8 lg:grid-cols-3">
               <div className="lg:col-span-2">
                 <div className="space-y-4">
-                  {cartItems.map((item) => (
+                  {cartItems?.map((item) => (
                     <CartItem key={item.id} item={item} />
                   ))}
                 </div>
               </div>
               <div className="lg:col-span-1">
-                <CartSummary
-                  subtotal={subtotal}
-                  shipping={shipping}
-                  total={total}
-                />
+                <CartSummary />
               </div>
             </div>
           )}
         </div>
 
-        {/* Sticky Checkout Button - Mobile Only */}
-        {cartItems.length > 0 && (
+        {cartItems?.length > 0 && (
           <div className="border-border bg-background fixed bottom-0 left-0 right-0 border-t p-4 md:hidden">
             <Button className="w-full" size="lg">
               Proceed to Checkout
@@ -75,7 +70,6 @@ const Cart = () => {
           </div>
         )}
       </div>
-      <Footer />
     </>
   );
 };
@@ -98,7 +92,6 @@ const CartItem = ({ item }) => {
           </div>
         </div>
 
-        {/* Product Details */}
         <div className="flex flex-1 flex-col justify-between">
           <div>
             <h3 className="text-foreground font-semibold">{product.name}</h3>
@@ -110,7 +103,6 @@ const CartItem = ({ item }) => {
             </p>
           </div>
 
-          {/* Quantity Controls */}
           <div className="mt-4 flex items-center gap-2">
             <Button
               variant="outline"
@@ -156,10 +148,10 @@ const CartItem = ({ item }) => {
           <Button
             variant="ghost"
             size="icon"
-            className="text-destructive hover:bg-destructive/10 hover:text-destructive"
+            className="opacity-75 hover:opacity-100"
             onClick={() => removeCartItem(item.id)}
           >
-            <Trash2 className="h-4 w-4" />
+            <X className="h-4 w-4" />
           </Button>
         </div>
       </div>
@@ -167,7 +159,14 @@ const CartItem = ({ item }) => {
   );
 };
 
-const CartSummary = ({ subtotal, shipping, total }) => {
+const CartSummary = () => {
+  const { data: cartItems } = useCartQuery();
+  const subtotal = cartItems?.reduce(
+    (sum, item) => sum + item.product.price * item.quantity,
+    0,
+  );
+  const shipping = subtotal > 1000 ? 0 : 99;
+  const total = subtotal + shipping;
   return (
     <Card className="border-border sticky top-8 border p-6">
       <h2 className="text-foreground text-lg font-semibold">Order Summary</h2>
@@ -176,7 +175,7 @@ const CartSummary = ({ subtotal, shipping, total }) => {
         <div className="flex justify-between">
           <span className="text-muted-foreground text-sm">Subtotal</span>
           <span className="text-foreground text-sm font-medium">
-            ₹{subtotal.toLocaleString()}
+            ₹{subtotal?.toLocaleString()}
           </span>
         </div>
 
