@@ -1,5 +1,6 @@
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
+import { Skeleton } from '@/components/ui/skeleton';
 import { Link } from 'react-router-dom';
 import { X, Plus, Minus } from 'lucide-react';
 import {
@@ -13,7 +14,7 @@ const Cart = () => {
   const { data: cartItems, isLoading, isError } = useCartQuery();
 
   if (isLoading) {
-    return <div>loading</div>;
+    return <CartSkeleton />;
   }
 
   if (isError) {
@@ -28,7 +29,7 @@ const Cart = () => {
         className="bg-background min-h-screen pb-24 md:pb-0"
       >
         <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
-          <div className="mb-8">
+          <div className="mb-5">
             <h1 className="text-foreground page-title">
               Shopping Cart
               {cartItems?.length > 0 && (
@@ -204,6 +205,50 @@ const CartSummary = () => {
         Proceed to Checkout
       </Button>
     </Card>
+  );
+};
+
+const CartSkeleton = () => {
+  return (
+    <div className="bg-background min-h-screen pb-24 md:pb-0">
+      <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
+        <h1 className="text-foreground page-title mb-5">Shopping Cart</h1>
+        <div className="grid gap-8 lg:grid-cols-3">
+          <div className="space-y-4 lg:col-span-2">
+            {Array.from({ length: 3 }).map((_, i) => (
+              <Card
+                key={i}
+                className="border-border overflow-hidden border py-4"
+              >
+                <div className="flex gap-4 p-4 sm:flex-row sm:gap-6">
+                  <Skeleton className="h-24 w-24 rounded-lg sm:h-32 sm:w-32" />
+                  <div className="flex flex-1 flex-col justify-start gap-4">
+                    <Skeleton className="h-4 w-3/4" />
+                    <Skeleton className="h-3 w-1/2" />
+                  </div>
+                  <div className="flex flex-col items-end justify-between gap-2">
+                    <Skeleton className="h-5 w-16" />
+                    <Skeleton className="h-8 w-8 rounded-full" />
+                  </div>
+                </div>
+              </Card>
+            ))}
+          </div>
+
+          <div className="space-y-4 lg:col-span-1">
+            <Card className="border-border sticky top-8 space-y-4 border p-6">
+              <Skeleton className="h-6 w-32" />
+              {[...Array(4)].map((_, i) => (
+                <Skeleton key={i} className="h-4 w-full" />
+              ))}
+              <div className="border-border mb-2 mt-2 border-t" />
+              <Skeleton className="h-5 w-1/2" />
+              <Skeleton className="mt-4 h-10 w-full" />
+            </Card>
+          </div>
+        </div>
+      </div>
+    </div>
   );
 };
 
