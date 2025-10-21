@@ -105,3 +105,76 @@ export async function deleteProduct(req, res) {
     res.status(500).json({ message: 'Error deleting product.' });
   }
 }
+
+export async function createProductCollection(req, res) {
+  const { categoryId, productId } = req.body;
+  const productCategory = await prisma.productCategory.create({
+    data: {
+      categoryId: categoryId,
+      productId: productId,
+    },
+  });
+  res.status(201).json({
+    message: 'Product category was set successfully.',
+    productCategory,
+  });
+}
+
+export async function getProductsByCollection(req, res) {
+  const { categoryId, categoryName } = req.query;
+
+  if (!categoryId && !categoryName) {
+    return res
+      .status(400)
+      .json({ message: 'Category ID or Name is required.' });
+  }
+
+  // return products by either name or id
+  if (categoryId) {
+    const products = await prisma.productCategory.findMany({
+      where: {
+        categoryId: categoryId,
+      },
+      include: {
+        product: true,
+      },
+    });
+    return res
+      .status(200)
+      .json({ message: 'Products fetched successfully.', products });
+  }
+
+  const category = await prisma.category.findUnique({
+    where: {
+      name: categoryName,
+    },
+  });
+
+  if (!category) {
+    return res.status(404).json({ message: 'Category not found.' });
+  }
+
+  const products = await prisma.productCategory.findMany({
+    where: {
+      categoryId: category.id,
+    },
+    include: {
+      product: true,
+    },
+  });
+  return res
+    .status(200)
+    .json({ message: 'Products fetched successfully.', products });
+}
+
+export async function deleteProductCollection(req, res) {
+  const { collectionId } = req.params;
+  await prisma.productCategory.delete({
+    where: {
+      id: collectionId,
+    },
+  });
+  res
+    .status(200)
+    .json({ message: 'Product category was removed successfully.' });
+}

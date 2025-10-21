@@ -1,4 +1,6 @@
+import { z } from 'zod';
 import {
+  productCollectionSchema,
   productCreateSchema,
   updateProductSchema,
 } from '../schemas/productSchema.js';
@@ -28,5 +30,17 @@ export async function validateUpdateProduct(req, res, next) {
   }
   req.validatedBody = zodResult.data;
 
+  next();
+}
+
+export async function validateProductCollection(req, res, next) {
+  const { success, error } = productCollectionSchema.safeParse(req.body);
+
+  if (!success) {
+    return res.status(400).json({
+      message: 'Invalid collection data.',
+      error: z.treeifyError(error),
+    });
+  }
   next();
 }

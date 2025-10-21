@@ -25,3 +25,10 @@ const productSchema = z.object({
 
 export const productCreateSchema = productSchema;
 export const updateProductSchema = productSchema.partial();
+
+export const productCollectionSchema = z.object({
+  categoryId: z.string({ required_error: 'Category ID is required.' }),
+  productId: z.string({ required_error: 'Product ID is required.' }),
+}).strict();
+
+export const updateProductCollectionSchema = productCollectionSchema.partial();

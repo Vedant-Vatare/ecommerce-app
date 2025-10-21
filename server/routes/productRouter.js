@@ -2,12 +2,16 @@ import Router from 'express';
 import upload from '../utils/multerConfig.js';
 import {
   validateCreateProduct,
+  validateProductCollection,
   validateUpdateProduct,
 } from '../middlewares/productValidation.js';
 import {
   createProduct,
+  createProductCollection,
   deleteProduct,
+  deleteProductCollection,
   getProductById,
+  getProductsByCollection,
   getProductsBySearch,
   updateProduct,
 } from '../controllers/productController.js';
@@ -15,6 +19,7 @@ import asyncHandler from '../utils/asyncHandler.js';
 import { authenticateAdmin } from '../middlewares/authUser.js';
 
 const router = Router();
+
 router.post(
   '/',
   authenticateAdmin,
@@ -23,8 +28,10 @@ router.post(
   asyncHandler(createProduct),
 );
 
-router.get('/:id', asyncHandler(getProductById));
 router.get('/bulk/:search', asyncHandler(getProductsBySearch));
+router.get('/collection', asyncHandler(getProductsByCollection));
+router.get('/:id', asyncHandler(getProductById));
+
 router.patch(
   '/:id',
   authenticateAdmin,
@@ -32,6 +39,19 @@ router.patch(
   validateUpdateProduct,
   asyncHandler(updateProduct),
 );
+
 router.delete('/:id', authenticateAdmin, asyncHandler(deleteProduct));
+router.delete(
+  '/collection/:collectionId',
+  authenticateAdmin,
+  asyncHandler(deleteProductCollection),
+);
+
+router.post(
+  '/collection/create',
+  authenticateAdmin,
+  validateProductCollection,
+  asyncHandler(createProductCollection),
+);
 
 export default router;
