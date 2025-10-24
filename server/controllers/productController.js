@@ -108,15 +108,28 @@ export async function deleteProduct(req, res) {
 
 export async function createProductCollection(req, res) {
   const { categoryId, productId } = req.body;
-  const productCategory = await prisma.productCategory.create({
-    data: {
-      categoryId: categoryId,
-      productId: productId,
-    },
+  
+  const addProductInCategory = await prisma.$transaction(async (tx) => {
+    const productCategory = await tx.productCategory.create({
+      data: {
+        categoryId: categoryId,
+        productId: productId,
+      }
+    });
+    
+    await tx.category.update({
+      where: { id: categoryId },
+      data: {
+        totalProductsCount: { increment: 1 },
+      },
+    });
+    
+    return productCategory;
   });
+  
   res.status(201).json({
     message: 'Product category was set successfully.',
-    productCategory,
+    productCategory: addProductInCategory,
   });
 }
 
