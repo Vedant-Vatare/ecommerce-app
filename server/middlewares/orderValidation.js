@@ -1,4 +1,4 @@
-import {z} from 'zod';
+import { z } from 'zod';
 import prisma from '../db/db.js';
 import { createOrderSchema } from '../schemas/orderSchema.js';
 

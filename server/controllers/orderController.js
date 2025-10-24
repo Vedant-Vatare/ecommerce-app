@@ -21,7 +21,7 @@ export async function getOrder(req, res) {
 export async function createOrder(req, res) {
   try {
     const discount = req.orderData.totalAmount > 999 ? 100 : 0;
-    const shippingCharges = 20
+    const shippingCharges = 20;
     const totalAmount = req.orderData.totalAmount - discount + shippingCharges;
 
     const razorpayOptions = {

@@ -1,4 +1,4 @@
-import {z} from 'zod';
+import { z } from 'zod';
 import prisma from '../db/db.js';
 import { productRecommendationSchema } from '../schemas/productSchema.js';
 import { uploadOnCloudinary } from '../utils/cloudinary.js';
@@ -67,7 +67,9 @@ export async function getProductsBySearch(req, res) {
   }
 }
 export async function getProductRecommendation(req, res) {
-  const { success, error, data } = productRecommendationSchema.safeParse(req.query);
+  const { success, error, data } = productRecommendationSchema.safeParse(
+    req.query,
+  );
   if (!success) {
     return res.status(400).json({
       message: 'Invalid query parameters.',
@@ -80,67 +82,66 @@ export async function getProductRecommendation(req, res) {
     limit,
   } = data;
 
+  if (categorySlugs?.length > 0) {
+    const recommendations = await prisma.productCategory.findMany({
+      where: {
+        AND: [
+          productIds?.length ? { productId: { notIn: productIds } } : {},
+          { category: { slug: { in: categorySlugs } } },
+        ],
+      },
+      take: limit,
+      select: {
+        product: {
+          select: {
+            id: true,
+            name: true,
+            description: true,
+            images: true,
+            price: true,
+            stock: true,
+          },
+        },
+        category: {
+          select: { id: true, name: true, slug: true },
+        },
+      },
+    });
 
-    if (categorySlugs?.length > 0) {
-      const recommendations = await prisma.productCategory.findMany({
-        where: {
-          AND: [
-            productIds?.length ? { productId: { notIn: productIds } } : {},
-            { category: { slug: { in: categorySlugs } } },
-          ],
+    return res.status(200).json({
+      message: 'Product recommendations fetched successfully.',
+      recommendations,
+    });
+  } else if (productIds?.length > 0) {
+    const recommendations = await prisma.productCategory.findMany({
+      where: {
+        productId: { notIn: productIds },
+        category: {
+          ProductCategory: { some: { productId: { in: productIds } } },
         },
-        take: limit,
-        select: {
-          product: {
-            select: {
-              id: true,
-              name: true,
-              description: true,
-              images: true,
-              price: true,
-              stock: true,
-            },
-          },
-          category: {
-            select: { id: true, name: true, slug: true },
-          },
-        },
-      });
-
-       return res.status(200).json({
-        message: 'Product recommendations fetched successfully.',
-        recommendations,
-      });
-    } else if (productIds?.length > 0) {
-      const recommendations = await prisma.productCategory.findMany({
-        where: {
-          productId: { notIn: productIds },
-          category: {
-            ProductCategory: { some: { productId: { in: productIds } } },
+      },
+      take: limit,
+      select: {
+        product: {
+          select: {
+            id: true,
+            name: true,
+            description: true,
+            images: true,
+            price: true,
+            stock: true,
           },
         },
-        take: limit,
-        select: {
-          product: {
-            select: {
-              id: true,
-              name: true,
-              description: true,
-              images: true,
-              price: true,
-              stock: true,
-            },
-          },
-          category: {
-            select: { id: true, name: true, slug: true },
-          },
+        category: {
+          select: { id: true, name: true, slug: true },
         },
-      });
-      return res.status(200).json({
-        message: 'Product recommendations fetched successfully.',
-        recommendations,
-      });
-    }
+      },
+    });
+    return res.status(200).json({
+      message: 'Product recommendations fetched successfully.',
+      recommendations,
+    });
+  }
 }
 
 export async function updateProduct(req, res) {

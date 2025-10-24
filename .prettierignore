@@ -1,3 +1,17 @@
 node_modules
 .github
 .env
+.env.*
+eslint.config.js
+components.json
+vite.config.js
+*.config.js
+pnpm-lock.yaml
+pnpm-workspace.yaml
+package-lock.json
+dist
+build
+.cache
+.vscode
+*.log
+.DS_Store
