@@ -27,6 +27,7 @@ export async function getAllCategories(req, res) {
     select: {
       id: true,
       name: true,
+      slug: true,
       totalProductsCount: true,
     },
   });

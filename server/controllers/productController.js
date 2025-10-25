@@ -117,13 +117,13 @@ export async function createProductCollection(req, res) {
       }
     });
     
-    await tx.category.update({
+    const res = await tx.category.update({
       where: { id: categoryId },
       data: {
         totalProductsCount: { increment: 1 },
       },
     });
-    
+    console.log({ res });
     return productCategory;
   });
   
@@ -134,12 +134,12 @@ export async function createProductCollection(req, res) {
 }
 
 export async function getProductsByCollection(req, res) {
-  const { categoryId, categoryName } = req.query;
+  const { categoryId, categoryName, categorySlug } = req.query;
 
-  if (!categoryId && !categoryName) {
+  if (!categoryId && !categoryName && !categorySlug) {
     return res
       .status(400)
-      .json({ message: 'Category ID or Name is required.' });
+      .json({ message: 'Category ID or Slug is required.' });
   }
 
   // return products by either name or id
@@ -157,9 +157,12 @@ export async function getProductsByCollection(req, res) {
       .json({ message: 'Products fetched successfully.', products });
   }
 
-  const category = await prisma.category.findUnique({
+  const category = await prisma.category.findFirst({
     where: {
-      name: categoryName,
+      OR: [
+        { name: categoryName || undefined },
+        { slug: categorySlug || undefined },
+      ],
     },
   });
 

@@ -67,6 +67,9 @@ model Product {
 model Category {
   id                 String            @id @default(uuid())
   name               String            @unique
+  slug               String            @unique
+  description        String?
+  image              String?
   totalProductsCount Int               @default(0)
   createdAt          DateTime          @default(now())
   updatedAt          DateTime          @updatedAt
