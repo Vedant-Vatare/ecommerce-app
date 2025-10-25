@@ -22,14 +22,23 @@ const RootHeaderLayout = () => {
           </div>
         </div>
 
-        <nav className="font-heading hidden w-max items-center gap-6 md:flex md:gap-10">
-          <Link className="w-max" to="/">
+        <nav className="font-heading hidden w-max items-center gap-4 md:flex md:gap-10">
+          <Link
+            className="hover:bg-muted w-max rounded-md p-2 px-3 transition-colors duration-200"
+            to="/"
+          >
             Home
           </Link>
-          <Link className="w-max" to="/shop">
-            Collections
+          <Link
+            className="hover:bg-muted w-max rounded-md p-2 px-3 transition-colors duration-200"
+            to="/shop"
+          >
+            Shop
           </Link>
-          <Link className="w-max" to="/contact">
+          <Link
+            className="hover:bg-muted duration200300 w-max rounded-md p-2 px-3 transition-colors"
+            to="/contact"
+          >
             Contact Us
           </Link>
         </nav>

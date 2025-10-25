@@ -1,6 +1,8 @@
+import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { ChevronsRightIcon } from 'lucide-react';
 import { motion } from 'motion/react';
+import heroimage from '@/assets/canva_hero_pack.png';
 import {
   Carousel,
   CarouselContent,
@@ -21,11 +23,6 @@ import { ReviewsCarousel } from '../user/Reviews';
 const fadeInUp = {
   hidden: { opacity: 0, y: 20 },
   visible: { opacity: 1, y: 0, transition: { duration: 0.6 } },
-};
-
-const fadeInScale = {
-  hidden: { opacity: 0, scale: 0.95 },
-  visible: { opacity: 1, scale: 1, transition: { duration: 0.6 } },
 };
 
 const staggerContainer = {
@@ -81,20 +78,20 @@ const HeroSection = () => {
         viewport={{ once: true, margin: '-100px' }}
         variants={fadeInUp}
       >
-        <div className="grid w-full max-w-7xl grid-cols-1 items-start gap-12 py-12 md:grid-cols-2 md:gap-16">
+        <div className="grid w-full max-w-7xl grid-cols-1 items-start gap-12 px-2 py-12 md:grid-cols-2 md:gap-16">
           <motion.div
-            className="space-y-6"
+            className="space-y-5"
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true }}
             variants={staggerContainer}
           >
             <motion.h1
-              className="mt-3 text-5xl font-bold tracking-tight xl:text-7xl"
+              className="text-3xl font-bold tracking-tight lg:mt-7 xl:text-5xl"
               variants={fadeInUp}
             >
-              <TextEffect preset="slide" per="char">
-                Stick Your Personality Everywhere
+              <TextEffect preset="slide" per="word">
+                Stickers for everything you like
               </TextEffect>
             </motion.h1>
             <motion.p
@@ -108,43 +105,28 @@ const HeroSection = () => {
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
               >
-                <Button
-                  size="lg"
-                  className="bg-primary hover:bg-primary/90 px-8 py-6 text-lg"
-                >
-                  Shop Now
-                </Button>
+                <Link to="/shop">
+                  <Button
+                    size="lg"
+                    className="bg-primary hover:bg-primary/90 px-8 py-6 text-lg"
+                  >
+                    Shop Now
+                  </Button>
+                </Link>
               </motion.div>
             </motion.div>
           </motion.div>
 
           <motion.div
-            className="relative mx-auto w-full max-w-64 lg:top-20 lg:mx-0 lg:ml-auto"
+            className="relative mx-auto w-full lg:mx-0 lg:ml-auto"
             initial={{ opacity: 0, y: 40 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.8, delay: 0.3 }}
+            transition={{ duration: 0.5 }}
             animate={{ y: [0, -10, 0] }}
             whileHover={{ scale: 1.05 }}
           >
-            <Carousel
-              autoplay={true}
-              autoplayInterval={2500}
-              opts={{ loop: true }}
-              className="overflow-hidden"
-            >
-              <CarouselContent>
-                {heroImages.map((image, index) => (
-                  <CarouselItem key={index}>
-                    <img
-                      src={image || '/placeholder.svg'}
-                      alt={`Hero image ${index + 1}`}
-                      className="h-auto w-full object-contain"
-                    />
-                  </CarouselItem>
-                ))}
-              </CarouselContent>
-            </Carousel>
+            <img src={heroimage} className="object-cover" alt="hero image" />
           </motion.div>
         </div>
       </motion.div>
@@ -232,14 +214,7 @@ const FeaturedProducts = () => {
           </Button>
         </motion.div>
       </motion.div>
-      <motion.div
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true }}
-        variants={staggerContainer}
-      >
-        <ProductGrid products={featuredProducts} showAddToCartBtn={true} />
-      </motion.div>
+      <ProductGrid products={featuredProducts} showAddToCartBtn={true} />
     </motion.div>
   );
 };
@@ -268,14 +243,7 @@ const TopSellingProducts = () => {
           </Button>
         </motion.div>
       </motion.div>
-      <motion.div
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true }}
-        variants={staggerContainer}
-      >
-        <ProductGrid products={topSellingProducts} showAddToCartBtn={true} />
-      </motion.div>
+      <ProductGrid products={topSellingProducts} showAddToCartBtn={true} />
     </motion.div>
   );
 };

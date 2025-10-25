@@ -9,6 +9,7 @@ import {
   useUpdateCartItemQuery,
 } from '@/hooks/cart';
 import ServerError from './ServerError';
+import CartFAQ from '../ui/FAQ/CartFAQ';
 
 const Cart = () => {
   const { data: cartItems, isLoading, isError } = useCartQuery();
@@ -48,18 +49,21 @@ const Cart = () => {
               </Link>
             </Card>
           ) : (
-            <div className="grid gap-8 lg:grid-cols-3">
-              <div className="lg:col-span-2">
-                <div className="space-y-4">
-                  {cartItems?.map((item) => (
-                    <CartItem key={item.id} item={item} />
-                  ))}
+            <>
+              <div className="grid gap-8 lg:grid-cols-3">
+                <div className="lg:col-span-2">
+                  <div className="space-y-4">
+                    {cartItems?.map((item) => (
+                      <CartItem key={item.id} item={item} />
+                    ))}
+                  </div>
+                </div>
+                <div className="lg:col-span-1">
+                  <CartSummary />
                 </div>
               </div>
-              <div className="lg:col-span-1">
-                <CartSummary />
-              </div>
-            </div>
+              <CartFAQ />
+            </>
           )}
         </div>
 
