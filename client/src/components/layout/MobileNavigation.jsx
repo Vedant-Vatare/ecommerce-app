@@ -1,20 +1,18 @@
 import { Link } from 'react-router-dom';
 import { HomeIcon, ShoppingBag, User2 } from 'lucide-react';
 import { useLocation } from 'react-router-dom';
-import { useMemo } from 'react';
 
 const MobileNavigationLayout = () => {
   const path = useLocation().pathname;
+  let currentPage = '';
 
-  const currentPage = () => {
-    if (path === '/') return 'home';
-    if (path === '/shop' || path.startsWith('/shop/')) return 'shop';
-    if (path === '/account' || path.startsWith('/account/')) return 'account';
-    return '';
-  };
+  if (path === '/') currentPage = 'home';
+  if (path === '/shop' || path.startsWith('/shop/')) currentPage = 'shop';
+  if (path === '/account' || path.startsWith('/account/'))
+    currentPage = 'account';
 
   return (
-    <div className="font-heading fixed bottom-0 left-0 right-0 z-[99999] flex justify-around border-t border-gray-200 bg-white p-2 text-xs font-semibold tracking-wide md:hidden">
+    <div className="font-heading fixed right-0 bottom-0 left-0 z-[99999] flex justify-around border-t border-gray-200 bg-white p-2 text-xs font-semibold tracking-wide md:hidden">
       <Link to="/" className="flex cursor-pointer flex-col items-center">
         <span
           className={`rounded-full p-3 transition-colors ${currentPage === 'home' ? 'bg-primary text-white' : 'bg-primary-foreground'}`}

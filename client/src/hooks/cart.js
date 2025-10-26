@@ -22,7 +22,6 @@ export const useAddToCartQuery = () => {
     mutationFn: addProductToCart,
 
     onMutate: async (product) => {
-      console.log('optimistic update');
       await queryClient.cancelQueries({ queryKey: ['cart'] });
 
       const previousCart = queryClient.getQueryData(['cart']);
@@ -39,8 +38,6 @@ export const useAddToCartQuery = () => {
     },
 
     onSuccess: (data, product, context) => {
-      console.log('Product added to cart:', data);
-      // add additional cart data from server response
       queryClient.setQueryData(['cart'], (old = []) => {
         return old.map((item) =>
           item.product.id === product.id ? { ...item, ...data } : item,
@@ -68,8 +65,6 @@ export const useUpdateCartItemQuery = () => {
       await queryClient.cancelQueries({ queryKey: ['cart'] });
       const previousCart = queryClient.getQueryData(['cart']);
 
-      console.log({ cartItemId, updatedQuantity });
-
       queryClient.setQueryData(['cart'], (cartItems = []) => {
         return cartItems.map((item) =>
           item.id === cartItemId
@@ -82,7 +77,6 @@ export const useUpdateCartItemQuery = () => {
     },
 
     onError: (error, { cartItemId }, context) => {
-      console.log('error updating cart item:', error);
       if (context?.previousCart) {
         queryClient.setQueryData(['cart'], context.previousCart);
       }

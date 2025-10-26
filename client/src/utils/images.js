@@ -7,7 +7,7 @@ import heroImage6 from '../assets/home/main/hero-img-6.jpg';
 import trendingMotivationImage from '../assets/home/trending/tending-motivational-text-1.png';
 import trendingAnimeImage from '../assets/home/trending/trending-anime-1.png';
 import trendingCodingImage from '../assets/home/trending/trending-coding-1.jpg';
-import trendingAnimalImage from '../assets/home/trending/trending-Animal-1.jpg';
+import trendingAnimalImage from '../assets/home/trending/trending-animal-1.jpg';
 import trendingCoolImage from '../assets/home/trending/trending-cool-1.jpg';
 import trendingSeasonalImage from '../assets/home/trending/trending-seasonal-1.png';
 import trendingPopCultureImage from '../assets/home/trending/trending-pop-1.jpg';

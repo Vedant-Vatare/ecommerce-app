@@ -8,12 +8,45 @@ import {
   Instagram,
   Linkedin,
 } from 'lucide-react';
+import { breadcrumbStore } from '@/store/globalStore';
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from '@/components/ui/breadcrumb';
+import { Fragment } from 'react';
 
 const Footer = () => {
+  const breadcrumbs = breadcrumbStore((state) => state.breadcrumbs);
+  const breadcrumbLen = breadcrumbs.length;
+
   return (
-    <footer className="bg-foreground text-background rounded-t-xl shadow-inner">
+    <footer className="bg-foreground text-background shadow-inner">
       <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-5">
+        <Breadcrumb className="mb-6">
+          <BreadcrumbList>
+            {breadcrumbs.map((crumb, index) => (
+              <Fragment key={index}>
+                <BreadcrumbItem>
+                  <BreadcrumbLink
+                    className="text-sm text-white hover:text-white hover:underline"
+                    href={crumb.path}
+                  >
+                    {crumb.label}
+                  </BreadcrumbLink>
+                </BreadcrumbItem>
+                {index < breadcrumbLen - 1 && (
+                  <BreadcrumbSeparator className="text-white" />
+                )}
+              </Fragment>
+            ))}
+          </BreadcrumbList>
+        </Breadcrumb>
+
+        <div className="xl:grid-col-5 grid grid-cols-1 gap-6 sm:grid-cols-2 md:mr-8 lg:grid-cols-5">
           <div className="lg:col-span-1">
             <div className="flex items-center gap-2">
               <img src={logo} alt="Sticker Studio Logo" className="h-16" />
@@ -46,27 +79,27 @@ const Footer = () => {
           <div>
             <h4 className="font-semibold">Quick Links</h4>
             <ul className="mt-4 space-y-3 text-sm">
-              <li>
+              <li className="text-xs">
                 <a href="#" className="opacity-80 transition hover:opacity-100">
                   Account
                 </a>
               </li>
-              <li>
+              <li className="text-xs">
                 <a href="#" className="opacity-80 transition hover:opacity-100">
                   Profile
                 </a>
               </li>
-              <li>
+              <li className="text-xs">
                 <a href="#" className="opacity-80 transition hover:opacity-100">
                   Orders
                 </a>
               </li>
-              <li>
+              <li className="text-xs">
                 <a href="#" className="opacity-80 transition hover:opacity-100">
                   Wishlist
                 </a>
               </li>
-              <li>
+              <li className="text-xs">
                 <a href="#" className="opacity-80 transition hover:opacity-100">
                   Logout
                 </a>
@@ -77,22 +110,22 @@ const Footer = () => {
           <div>
             <h4 className="font-semibold">Support / Help</h4>
             <ul className="mt-4 space-y-3 text-sm">
-              <li>
+              <li className="text-xs">
                 <a href="#" className="opacity-80 transition hover:opacity-100">
                   FAQ
                 </a>
               </li>
-              <li>
+              <li className="text-xs">
                 <a href="#" className="opacity-80 transition hover:opacity-100">
                   Contact
                 </a>
               </li>
-              <li>
+              <li className="text-xs">
                 <a href="#" className="opacity-80 transition hover:opacity-100">
                   Refund / Return Policy
                 </a>
               </li>
-              <li>
+              <li className="text-xs">
                 <a href="#" className="opacity-80 transition hover:opacity-100">
                   Shipping & Delivery
                 </a>
@@ -103,17 +136,17 @@ const Footer = () => {
           <div>
             <h4 className="font-semibold">Company</h4>
             <ul className="mt-4 space-y-3 text-sm">
-              <li>
+              <li className="text-xs">
                 <a href="#" className="opacity-80 transition hover:opacity-100">
                   About Us
                 </a>
               </li>
-              <li>
+              <li className="text-xs">
                 <a href="#" className="opacity-80 transition hover:opacity-100">
                   Privacy Policy
                 </a>
               </li>
-              <li>
+              <li className="text-xs">
                 <a href="#" className="opacity-80 transition hover:opacity-100">
                   Terms of Service
                 </a>
@@ -124,7 +157,7 @@ const Footer = () => {
           <div>
             <h4 className="font-semibold">Contact Info</h4>
             <ul className="mt-4 space-y-3 text-sm">
-              <li className="flex gap-3">
+              <li className="text-sx fletext-xs">
                 <Phone size={16} className="mt-0.5 flex-shrink-0" />
                 <a
                   href="tel:+1234567890"
@@ -133,7 +166,7 @@ const Footer = () => {
                   +91 123 456 7890
                 </a>
               </li>
-              <li className="flex gap-3">
+              <li className="flex gap-3 text-xs">
                 <Mail size={16} className="mt-0.5 flex-shrink-0" />
                 <a
                   href="mailto:support@stickerstudio.com"
@@ -142,7 +175,7 @@ const Footer = () => {
                   support@stickerstudio@gmail.com
                 </a>
               </li>
-              <li className="flex gap-3">
+              <li className="flex gap-3 text-xs">
                 <MapPin size={16} className="mt-0.5 flex-shrink-0" />
                 <span className="opacity-80">Address</span>
               </li>
