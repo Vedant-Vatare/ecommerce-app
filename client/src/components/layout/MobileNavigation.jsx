@@ -11,6 +11,11 @@ const MobileNavigationLayout = () => {
   if (path === '/account' || path.startsWith('/account/'))
     currentPage = 'account';
 
+  if (path === '/') currentPage = 'home';
+  if (path === '/shop' || path.startsWith('/shop/')) currentPage = 'shop';
+  if (path === '/account' || path.startsWith('/account/'))
+    currentPage = 'account';
+
   return (
     <div className="font-heading fixed right-0 bottom-0 left-0 z-[99999] flex justify-around border-t border-gray-200 bg-white p-2 text-xs font-semibold tracking-wide md:hidden">
       <Link to="/" className="flex cursor-pointer flex-col items-center">

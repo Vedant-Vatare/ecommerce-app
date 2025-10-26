@@ -104,7 +104,6 @@ const Cart = () => {
                   </div>
                 </div>
               </div>
-              <CartFAQ />
             </>
           )}
         </div>
