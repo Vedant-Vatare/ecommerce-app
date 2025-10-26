@@ -11,6 +11,7 @@ import {
   deleteProduct,
   deleteProductCollection,
   getProductById,
+  getProductRecommendation,
   getProductsByCollection,
   getProductsBySearch,
   updateProduct,
@@ -30,6 +31,7 @@ router.post(
 
 router.get('/bulk/:search', asyncHandler(getProductsBySearch));
 router.get('/collection', asyncHandler(getProductsByCollection));
+router.get("/recommendations", asyncHandler(getProductRecommendation));
 router.get('/:id', asyncHandler(getProductById));
 
 router.patch(

@@ -26,9 +26,32 @@ const productSchema = z.object({
 export const productCreateSchema = productSchema;
 export const updateProductSchema = productSchema.partial();
 
-export const productCollectionSchema = z.object({
-  categoryId: z.string({ required_error: 'Category ID is required.' }),
-  productId: z.string({ required_error: 'Product ID is required.' }),
-}).strict();
+export const productCollectionSchema = z
+  .object({
+    categoryId: z.string({ required_error: 'Category ID is required.' }),
+    productId: z.string({ required_error: 'Product ID is required.' }),
+  })
+  .strict();
 
 export const updateProductCollectionSchema = productCollectionSchema.partial();
+
+export const productRecommendationSchema = z
+  .object({
+    'productId[]': z
+      .union([z.string().min(1), z.array(z.string().min(1))])
+      .optional()
+      .transform((val) => (val ? (Array.isArray(val) ? val : [val]) : [])),
+    'categorySlug[]': z
+      .union([z.string().min(1), z.array(z.string().min(1))])
+      .optional()
+      .transform((val) => (val ? (Array.isArray(val) ? val : [val]) : [])),
+    limit: z.coerce.number().min(1).max(100).default(10),
+  })
+  .refine(
+    (data) =>
+      data['productId[]']?.length > 0 || data['categorySlug[]']?.length > 0,
+    {
+      message: 'At least one of productIds or categorySlugs is required',
+      path: [],
+    },
+  );

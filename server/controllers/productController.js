@@ -1,4 +1,6 @@
+import {z} from 'zod';
 import prisma from '../db/db.js';
+import { productRecommendationSchema } from '../schemas/productSchema.js';
 import { uploadOnCloudinary } from '../utils/cloudinary.js';
 
 export async function createProduct(req, res) {
@@ -64,6 +66,82 @@ export async function getProductsBySearch(req, res) {
     return res.status(500).json({ message: 'Error fetching products.', error });
   }
 }
+export async function getProductRecommendation(req, res) {
+  const { success, error, data } = productRecommendationSchema.safeParse(req.query);
+  if (!success) {
+    return res.status(400).json({
+      message: 'Invalid query parameters.',
+      error: z.treeifyError(error),
+    });
+  }
+  const {
+    'productId[]': productIds,
+    'categorySlug[]': categorySlugs,
+    limit,
+  } = data;
+
+
+    if (categorySlugs?.length > 0) {
+      const recommendations = await prisma.productCategory.findMany({
+        where: {
+          AND: [
+            productIds?.length ? { productId: { notIn: productIds } } : {},
+            { category: { slug: { in: categorySlugs } } },
+          ],
+        },
+        take: limit,
+        select: {
+          product: {
+            select: {
+              id: true,
+              name: true,
+              description: true,
+              images: true,
+              price: true,
+              stock: true,
+            },
+          },
+          category: {
+            select: { id: true, name: true, slug: true },
+          },
+        },
+      });
+
+       return res.status(200).json({
+        message: 'Product recommendations fetched successfully.',
+        recommendations,
+      });
+    } else if (productIds?.length > 0) {
+      const recommendations = await prisma.productCategory.findMany({
+        where: {
+          productId: { notIn: productIds },
+          category: {
+            ProductCategory: { some: { productId: { in: productIds } } },
+          },
+        },
+        take: limit,
+        select: {
+          product: {
+            select: {
+              id: true,
+              name: true,
+              description: true,
+              images: true,
+              price: true,
+              stock: true,
+            },
+          },
+          category: {
+            select: { id: true, name: true, slug: true },
+          },
+        },
+      });
+      return res.status(200).json({
+        message: 'Product recommendations fetched successfully.',
+        recommendations,
+      });
+    }
+}
 
 export async function updateProduct(req, res) {
   const { id } = req.params;
@@ -108,15 +186,15 @@ export async function deleteProduct(req, res) {
 
 export async function createProductCollection(req, res) {
   const { categoryId, productId } = req.body;
-  
+
   const addProductInCategory = await prisma.$transaction(async (tx) => {
     const productCategory = await tx.productCategory.create({
       data: {
         categoryId: categoryId,
         productId: productId,
-      }
+      },
     });
-    
+
     const res = await tx.category.update({
       where: { id: categoryId },
       data: {
@@ -126,7 +204,7 @@ export async function createProductCollection(req, res) {
     console.log({ res });
     return productCategory;
   });
-  
+
   res.status(201).json({
     message: 'Product category was set successfully.',
     productCategory: addProductInCategory,
