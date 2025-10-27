@@ -20,8 +20,12 @@ export async function getOrder(req, res) {
 
 export async function createOrder(req, res) {
   try {
+    const discount = req.orderData.totalAmount > 999 ? 100 : 0;
+    const shippingCharges = 20
+    const totalAmount = req.orderData.totalAmount - discount + shippingCharges;
+
     const razorpayOptions = {
-      amount: Math.round(req.orderData.totalAmount * 100),
+      amount: Math.round(totalAmount * 100),
       currency: 'INR',
       receipt: `order_${nanoid()}`,
       notes: {
@@ -41,7 +45,7 @@ export async function createOrder(req, res) {
             amount: item.price * item.orderedQuantity,
           })),
         },
-        totalAmount: req.orderData.totalAmount,
+        totalAmount: totalAmount,
         transactionId: razorpayOrder.id,
         paymentStatus: 'pending',
         orderStatus: 'pending',
@@ -55,7 +59,7 @@ export async function createOrder(req, res) {
       order,
       razorpay: {
         orderId: razorpayOrder.id,
-        amount: razorpayOrder.amount,
+        amount: totalAmount,
         currency: razorpayOrder.currency,
         keyId: process.env.RAZORPAY_KEY_ID,
         receipt: razorpayOrder.receipt,

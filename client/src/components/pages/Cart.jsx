@@ -85,32 +85,34 @@ const Cart = () => {
                   ))}
                 </div>
               </div>
-              <div className="mt-10">
-                <h2 className="mb-2 text-center text-xl lg:mb-4">
-                  You might also like
-                </h2>
-                <div className="flex w-full justify-center">
-                  <div className="flex w-full max-w-5xl flex-col gap-2">
-                    {isLoadingSimilar ? (
-                      <CartSkeleton />
-                    ) : (
-                      <>
-                        <ProductGrid
-                          products={similarProducts}
-                          showAddToCartBtn={true}
-                        />
-                      </>
-                    )}
+              {similarProducts?.length > 0 && (
+                <div className="mt-10">
+                  <h2 className="mb-2 text-center text-xl lg:mb-4">
+                    You might also like
+                  </h2>
+                  <div className="flex w-full justify-center">
+                    <div className="flex w-full max-w-5xl flex-col gap-2">
+                      {isLoadingSimilar ? (
+                        <CartSkeleton />
+                      ) : (
+                        <>
+                          <ProductGrid
+                            products={similarProducts}
+                            showAddToCartBtn={true}
+                          />
+                        </>
+                      )}
+                    </div>
                   </div>
                 </div>
-              </div>
+              )}
               <CartFAQ />
             </>
           )}
         </div>
       </div>
       {cartItems?.length > 0 && (
-        <div className="bg-background font-body fixed right-0 bottom-18 left-0 z-50 flex w-screen items-center justify-between gap-10 border border-t-2 pl-3 backdrop-blur-sm md:bottom-0 md:justify-end md:px-10">
+        <div className="bg-background fixed right-0 bottom-18 left-0 z-50 flex w-screen items-center justify-between gap-10 border border-t-2 pl-3 backdrop-blur-sm md:bottom-0 md:justify-end md:px-10">
           <span className="text-base font-semibold md:text-xl">
             ₹{cartValue.toLocaleString()}
           </span>
@@ -187,7 +189,7 @@ const CartItem = ({ item }) => {
         </div>
 
         <div className="flex flex-col items-end justify-between">
-          <div className="font-heading text-right">
+          <div className="text-right">
             <p className="text-foreground text-lg font-semibold tracking-tight">
               ₹{product.price.toLocaleString()}
             </p>

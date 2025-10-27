@@ -1,3 +1,4 @@
+import {z} from 'zod';
 import prisma from '../db/db.js';
 import { createOrderSchema } from '../schemas/orderSchema.js';
 
@@ -7,7 +8,7 @@ export async function validateCreateOrder(req, res, next) {
     if (!zodResponse.success) {
       return res.status(400).json({
         message: 'invalid order data',
-        error: zodResponse.error,
+        error: z.treeifyError(zodResponse.error),
       });
     }
 
