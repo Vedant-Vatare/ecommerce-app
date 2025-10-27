@@ -8,7 +8,7 @@ import { useCartQuery } from '@/hooks/cart';
 const RootHeaderLayout = () => {
   const { data: cartItems } = useCartQuery();
   return (
-    <header className="sticky top-0 z-[9999] bg-white shadow-md">
+    <header className="sticky top-0 z-[999] bg-white shadow-md">
       <div className="flex h-14 w-full items-center justify-between px-3 md:gap-2">
         <div className="flex h-full items-center">
           <div className="grid w-32 place-items-center md:w-48">
@@ -68,7 +68,7 @@ const RootHeaderLayout = () => {
               })} bg-primary-foreground relative inline-flex aspect-square h-10 w-10 items-center justify-center p-0`}
             >
               {!isNaN(cartItems?.length) && cartItems.length > 0 && (
-                <span className="bg-primary text-info absolute -right-2 -top-2 flex h-6 w-6 items-center justify-center rounded-full font-sans text-xs font-semibold text-white">
+                <span className="bg-primary text-info absolute -top-2 -right-2 flex h-6 w-6 items-center justify-center rounded-full font-sans text-xs font-semibold text-white">
                   {cartItems.length}
                 </span>
               )}
@@ -103,7 +103,7 @@ const InputSearchbar = () => {
         type="text"
         name="search"
         placeholder="Search..."
-        className="focus:ring-accent text-md border-1 h-max w-full rounded-sm border-gray-300 p-2 px-4 pr-10 font-sans focus:outline-none focus:ring-2"
+        className="focus:ring-accent text-md h-max w-full rounded-sm border-1 border-gray-300 p-2 px-4 pr-10 font-sans focus:ring-2 focus:outline-none"
       />
       <Button
         variant={'outline'}
