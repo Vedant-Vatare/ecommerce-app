@@ -100,17 +100,16 @@ export async function createAdmin(req, res) {
 
 export async function createUserAddress(req, res) {
   try {
-    const user = await prisma.user.findUnique({
-      where: { id: req.userId },
+    const totalAddresses = await prisma.userAddress.count({
+      where: { userId: req.userId },
     });
-
-    if (!user) {
-      return res.status(404).json({ message: 'User not found.' });
+    if(totalAddresses >= 3) {
+      return res.status(400).json({ message: 'Address limit reached. You can only add up to 3 addresses.' });
     }
-
+    
     const userAddress = await prisma.userAddress.create({
       data: {
-        userId: user.id,
+        userId: req.userId,
         ...req.body,
       },
     });
@@ -174,38 +173,31 @@ export async function getUserAddressById(req, res) {
 }
 
 export async function updateUserAddress(req, res) {
-  try {
-    const { id } = req.params;
-    if (!id) {
-      return res.status(400).json({ message: 'Address id is required.' });
-    }
+  const { id } = req.params;
+  if (!id) {
+    return res.status(400).json({ message: 'Address id is required.' });
+  }
 
-    const address = await prisma.userAddress.findUnique({
+  const updatedAddress = await prisma.userAddress.update({
+    where: { id },
+    data: req.body,
+  });
+
+  // removing other default address
+  if (req.body.isDefault) {
+    await prisma.userAddress.updateMany({
       where: {
-        id,
         userId: req.userId,
+        id: { not: id },
       },
-    });
-
-    if (!address) {
-      return res.status(404).json({ message: 'Address not found.' });
-    }
-
-    const updatedAddress = await prisma.userAddress.update({
-      where: { id },
-      data: req.body,
-    });
-
-    return res.status(200).json({
-      message: 'User address updated successfully.',
-      address: updatedAddress,
-    });
-  } catch (error) {
-    return res.status(500).json({
-      message: 'Error updating user address.',
-      error: error.message,
+      data: { isDefault: false },
     });
   }
+  return res.status(200).json({
+    message: 'User address updated successfully.',
+    address: updatedAddress,
+  });
+
 }
 
 export async function deleteUserAddress(req, res) {
