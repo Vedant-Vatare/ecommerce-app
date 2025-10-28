@@ -257,7 +257,7 @@ const Testimonials = () => {
       viewport={{ once: true, margin: '-100px' }}
       variants={fadeInUp}
     >
-      <motion.h2 className="section-title text-center" variants={fadeInUp}>
+      <motion.h2 className="section-title mb-3 text-center" variants={fadeInUp}>
         What Our Customers Say
       </motion.h2>
       <motion.div

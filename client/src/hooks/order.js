@@ -6,7 +6,7 @@ export const usePlaceOrder = () => {
   const isLoggedIn = useUserStore((state) => state.isLoggedIn);
   return useMutation({
     mutationKey: ['createOrder'],
-    mutationFn: async (orderItems) => createOrder(orderItems),
+    mutationFn: async (orderData) => createOrder(orderData),
     enabled: isLoggedIn,
     staleTime: Infinity,
   });

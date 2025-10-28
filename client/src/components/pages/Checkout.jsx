@@ -14,14 +14,16 @@ import { useLoginModal } from '@/store/userStore';
 import { usePlaceOrder } from '@/hooks/order';
 import { useRazorpay } from 'react-razorpay';
 import { verifyPayment } from '@/services/order';
+import { ShippingAddressSection } from '../user/ShippingAddress';
 
 const Checkout = () => {
   const { data: cartItems, isLoading, isError } = useCartQuery();
   const { mutateAsync: placeOrder, isPending: isPlacingOrder } =
     usePlaceOrder();
-  const { Razorpay, error: razorpayError } = useRazorpay();
+  const { Razorpay } = useRazorpay();
   const isLoggedIn = useUserStore((state) => state.isLoggedIn);
   const [agreedToTerms, setAgreedToTerms] = useState(false);
+  const [shippingAddressId, setShippingAddressId] = useState(false);
   const setBreadcrumbs = breadcrumbStore((state) => state.setBreadcrumbs);
   const openLoginModal = useLoginModal((state) => state.openModal);
   const subtotal =
@@ -29,7 +31,6 @@ const Checkout = () => {
       (total, item) => total + item.product.price * item.quantity,
       0,
     ) || 0;
-
   const discount = subtotal > 999 ? 100 : 0;
   const shipping = 20;
   const total = subtotal - discount + shipping;
@@ -52,7 +53,8 @@ const Checkout = () => {
       productId: item.product.id,
       quantity: item.quantity,
     }));
-    const order = await placeOrder(orderItems);
+    const order = await placeOrder({ orderItems, shippingAddressId });
+
     const options = {
       key: import.meta.env.VITE_RAZORPAY_KEY,
       name: 'Sticker Studio',
@@ -126,11 +128,12 @@ const Checkout = () => {
             </p>
           </div>
         )}
-
-        <Card className="border-border bg-muted/40 border p-4 md:p-6">
-          <h2 className="text-foreground mb-6 text-xl font-semibold">
-            Order Summary
-          </h2>
+        <ShippingAddressSection
+          shippingAddressId={shippingAddressId}
+          setShippingAddressId={setShippingAddressId}
+        />
+        <Card className="border-border bg-muted/30 gap-3 rounded-xs border p-4 md:p-6">
+          <h2 className="text-foreground !font-medium">Order Summary</h2>
 
           <div className="space-y-4">
             {cartItems?.map((item, index) => (

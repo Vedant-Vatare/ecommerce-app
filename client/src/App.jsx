@@ -4,13 +4,13 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import RootLayout from './components/layout/RootLayout';
 import Home from './components/pages/Home';
 import ProductsCollection from './components/pages/ProductCollection';
+import { Toaster } from '@/components/ui/sonner';
 import { LoginModal } from './components/ui/modal/LoginModal';
 const Cart = lazy(() => import('./components/pages/Cart'));
 const Checkout = lazy(() => import('./components/pages/Checkout'));
 const Shop = lazy(() => import('./components/pages/Shop'));
 const PageNotFound = lazy(() => import('./components/pages/PageNotFound'));
 const ServerError = lazy(() => import('./components/pages/ServerError'));
-
 function App() {
   return (
     <BrowserRouter>
@@ -30,6 +30,7 @@ function App() {
         <Route path="*" element={<PageNotFound />} />
       </Routes>
       <LoginModal />
+      <Toaster position="top" />
     </BrowserRouter>
   );
 }
