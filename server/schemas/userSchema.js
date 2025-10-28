@@ -6,7 +6,10 @@ export const userSchema = z.object({
 });
 
 export const userAddressSchema = z.object({
-  name: z.string().min(3).max(128, { message: 'Name must be 2 to 128 characters long' }),
+  name: z
+    .string()
+    .min(3)
+    .max(128, { message: 'Name must be 2 to 128 characters long' }),
   phone: z
     .string()
     .length(10, { message: 'Phone number must be 10 digits long' }),

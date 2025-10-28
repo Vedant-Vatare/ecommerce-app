@@ -74,7 +74,7 @@ export const ReviewsCarousel = () => {
                   </Rating>
                   <CardContent className="flex h-full flex-col justify-between py-4">
                     <blockquote className="relative block">
-                      <p className="font-heading pl-6 pr-6 text-base font-bold italic text-gray-700">
+                      <p className="font-heading pr-6 pl-6 text-base font-bold text-gray-700 italic">
                         {review.text}
                       </p>
                     </blockquote>

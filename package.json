@@ -4,9 +4,6 @@
   "private": true,
   "description": "",
   "main": "index.js",
-  "dependencies": {
-    "prettier": "^3.6.2"
-  },
   "scripts": {
     "dev:client": "pnpm --filter client dev",
     "dev:server": "pnpm --filter server dev",
@@ -23,5 +20,9 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "type": "module"
+  "type": "module",
+  "devDependencies": {
+    "prettier": "^3.6.2",
+    "prettier-plugin-tailwindcss": "^0.7.1"
+  }
 }
