@@ -2,7 +2,7 @@ import {
   updateUserAddressSchema,
   userAddressSchema,
   userSchema,
-} from '../schemas/userSchema.js';
+} from 'shared/schemas/userSchema.js';
 
 export function validateUserSignup(req, res, next) {
   const { email, password } = req.body;

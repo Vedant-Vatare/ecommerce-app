@@ -104,11 +104,9 @@ export async function createUserAddress(req, res) {
       where: { userId: req.userId },
     });
     if (totalAddresses >= 3) {
-      return res
-        .status(400)
-        .json({
-          message: 'Address limit reached. You can only add up to 3 addresses.',
-        });
+      return res.status(400).json({
+        message: 'Address limit reached. You can only add up to 3 addresses.',
+      });
     }
 
     const userAddress = await prisma.userAddress.create({

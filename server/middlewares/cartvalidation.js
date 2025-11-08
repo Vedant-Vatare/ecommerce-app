@@ -1,4 +1,4 @@
-import { modifyCartSchema } from '../schemas/cartSchema.js';
+import { modifyCartSchema } from 'shared/schemas/cartSchema.js';
 
 export async function validateUpdateCart(req, res, next) {
   const zodResult = modifyCartSchema.safeParse(req.body);

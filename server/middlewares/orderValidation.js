@@ -1,6 +1,5 @@
-import { z } from 'zod';
 import prisma from '../db/db.js';
-import { createOrderSchema } from '../schemas/orderSchema.js';
+import { createOrderSchema } from 'shared/schemas/orderSchema.js';
 
 export async function validateCreateOrder(req, res, next) {
   try {

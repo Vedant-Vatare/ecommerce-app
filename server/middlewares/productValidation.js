@@ -1,9 +1,8 @@
-import { z } from 'zod';
 import {
   productCollectionSchema,
   productCreateSchema,
   updateProductSchema,
-} from '../schemas/productSchema.js';
+} from 'shared/schemas/productSchema.js';
 
 export async function validateCreateProduct(req, res, next) {
   const zodResult = productCreateSchema.safeParse(req.body);
