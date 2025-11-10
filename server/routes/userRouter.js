@@ -10,6 +10,9 @@ import {
   addProductToWishlist,
   getUserWishlist,
   deleteUserWishlist,
+  getUserProfile,
+  sendVerificationCode,
+  verifyEmailCode,
 } from '../controllers/userController.js';
 import {
   validateCreateAddress,
@@ -29,6 +32,7 @@ router.post(
   validateCreateAddress,
   asyncHandler(createUserAddress),
 );
+router.get('/profile', authenticateUser, asyncHandler(getUserProfile));
 router.get('/address/all', authenticateUser, asyncHandler(getUserAllAddresses));
 router.get('/address/:id', authenticateUser, asyncHandler(getUserAddressById));
 router.patch(
@@ -55,5 +59,8 @@ router.delete(
   authenticateUser,
   asyncHandler(deleteUserWishlist),
 );
+
+router.get('/send-verification-code/', asyncHandler(sendVerificationCode));
+router.get('/verify-email-code/', asyncHandler(verifyEmailCode));
 
 export default router;

@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Email Verification</title>
+  </head>
+  <body
+    style="
+      margin: 0;
+      padding: 0;
+      background-color: #f6f8fa;
+      font-family: Arial, sans-serif;
+    "
+  >
+    <table
+      align="center"
+      width="100%"
+      style="
+        max-width: 600px;
+        background: #ffffff;
+        margin: 30px auto;
+        border-radius: 8px;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+      "
+    >
+      <tr>
+        <td
+          style="
+            padding: 25px;
+            text-align: center;
+            border-bottom: 1px solid #eee;
+          "
+        >
+          <h2 style="color: #222; margin: 0">Sticker Studio</h2>
+        </td>
+      </tr>
+      <tr>
+        <td style="padding: 30px 25px; text-align: center; color: #333">
+          <p style="font-size: 16px; margin: 0 0 10px 0">
+            Verify your email address
+          </p>
+          <p style="font-size: 14px; color: #555">
+            Use the 6-digit code below to complete your verification:
+          </p>
+          <div style="margin: 25px 0">
+            <span
+              style="
+                display: inline-block;
+                font-size: 28px;
+                font-weight: bold;
+                letter-spacing: 6px;
+                color: #007bff;
+                background: #f0f4ff;
+                padding: 10px 20px;
+                border-radius: 6px;
+              "
+            >
+              {{code}}
+            </span>
+          </div>
+          <p style="font-size: 13px; color: #666">
+            This code will expire in 10 minutes.
+          </p>
+        </td>
+      </tr>
+      <tr>
+        <td
+          style="
+            padding: 15px;
+            text-align: center;
+            background: #f6f8fa;
+            border-top: 1px solid #eee;
+          "
+        >
+          <p style="font-size: 12px; color: #999; margin: 0">
+            © 2025 Sticker Studio. All rights reserved.
+          </p>
+        </td>
+      </tr>
+    </table>
+  </body>
+</html>

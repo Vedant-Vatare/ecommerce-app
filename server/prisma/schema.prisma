@@ -8,17 +8,20 @@ datasource db {
 }
 
 model User {
-  id        String        @id @default(uuid())
-  full_name String?
-  email     String        @unique
-  password  String
-  createdAt DateTime      @default(now())
-  updatedAt DateTime      @updatedAt
-  addresses UserAddress[]
-  Admin     Admin[]
-  UserCart  UserCart[]
-  Order     Order[]
-  Wishlist  Wishlist[]
+  id              String        @id @default(uuid())
+  full_name       String?
+  email           String?       @unique
+  phone           String?       @unique
+  password        String
+  isMailVerified  Boolean       @default(false)
+  isPhoneVerified Boolean       @default(false)
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+  addresses       UserAddress[]
+  Admin           Admin[]
+  UserCart        UserCart[]
+  Order           Order[]
+  Wishlist        Wishlist[]
 }
 
 model Admin {
@@ -29,6 +32,15 @@ model Admin {
   updatedAt DateTime @updatedAt
 
   @@index([userId])
+}
+
+model userVerification {
+  id               String    @id @default(uuid())
+  email            String?   @unique
+  phone            String?   @unique
+  verificationCode String
+  createdAt        DateTime  @default(now())
+  expiresAt        DateTime?
 }
 
 model UserAddress {

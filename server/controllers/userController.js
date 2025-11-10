@@ -1,6 +1,8 @@
 import prisma from '../db/db.js';
 import { hash, compare } from 'bcryptjs';
 import jwt from 'jsonwebtoken';
+import { z } from 'zod';
+import { sendEmailVerification } from '../utils/emails/email.js';
 export async function createUser(req, res) {
   try {
     const hashedPassword = await hash(req.body.password, 10);
@@ -96,6 +98,75 @@ export async function createAdmin(req, res) {
   } catch (error) {
     return res.status(500).json({ message: 'Error creating admin.', error });
   }
+}
+
+export async function sendVerificationCode(req, res) {
+  const { email } = req.query;
+  if (!email || !z.email().safeParse(email).success) {
+    return res.status(400).json({ message: 'A valid email is required.' });
+  }
+  const { success, code } = await sendEmailVerification(email);
+  if (!success) {
+    return res
+      .status(500)
+      .json({ message: 'Failed to send verification code.' });
+  }
+  await prisma.userVerification.deleteMany({ where: { email } });
+
+  await prisma.userVerification.create({
+    data: {
+      email,
+      verificationCode: code,
+      expiresAt: new Date(Date.now() + 15 * 60 * 1000),
+    },
+  });
+  return res.status(200).json({
+    message: 'Verification code sent successfully.',
+  });
+}
+
+export async function verifyEmailCode(req, res) {
+  const { email, code } = req.query;
+  if (!email || !code) {
+    return res
+      .status(400)
+      .json({ message: 'Email and verification code are required.' });
+  }
+
+  const record = await prisma.userVerification.findFirst({
+    where: { email, verificationCode: code },
+  });
+
+  if (!record || record.expiresAt < new Date()) {
+    return res
+      .status(400)
+      .json({ message: 'Invalid or expired verification code.' });
+  }
+
+  return res.status(200).json({ message: 'Email verified successfully.' });
+}
+
+export async function getUserProfile(req, res) {
+  const user = await prisma.user.findUnique({
+    where: { id: req.userId },
+    select: {
+      id: true,
+      full_name: true,
+      email: true,
+      addresses: true,
+      Wishlist: true,
+      Order: true,
+    },
+  });
+
+  if (!user) {
+    return res.status(404).json({ message: 'User not found.' });
+  }
+
+  return res.status(200).json({
+    message: 'User profile fetched successfully.',
+    user,
+  });
 }
 
 export async function createUserAddress(req, res) {

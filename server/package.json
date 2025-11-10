@@ -31,6 +31,7 @@
     "nanoid": "^5.1.5",
     "razorpay": "^2.9.6",
     "shared": "workspace:*",
+    "sib-api-v3-sdk": "^8.5.0",
     "zod": "^4.1.11"
   },
   "devDependencies": {

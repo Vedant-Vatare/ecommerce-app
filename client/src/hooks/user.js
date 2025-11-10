@@ -1,6 +1,10 @@
 import { useUserStore } from '@/store/userStore';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { addUserAddress, fetchUserAddresses } from '@/services/user';
+import {
+  addUserAddress,
+  fetchUserAddresses,
+  fetchUserProfile,
+} from '@/services/user';
 
 export const useUserAddresses = () => {
   const isLoggedIn = useUserStore((state) => state.isLoggedIn);
@@ -22,5 +26,14 @@ export const useAddUserAddress = () => {
     onSuccess: () => {
       queryClient.invalidateQueries(['user-addresses']);
     },
+  });
+};
+
+export const useUserProfile = () => {
+  const isLoggedIn = useUserStore((state) => state.isLoggedIn);
+  return useQuery({
+    queryKey: ['user-profile'],
+    queryFn: fetchUserProfile,
+    enabled: isLoggedIn,
   });
 };

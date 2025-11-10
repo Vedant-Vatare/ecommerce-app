@@ -14,3 +14,13 @@ export const addUserAddress = async (addressData) => {
   const response = await axiosInstance.post('/user/address/', addressData);
   return response.data.userAddress;
 };
+
+export const fetchUserProfile = async () => {
+  const response = await axiosInstance.get('/user/profile', {
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${localStorage.getItem('token')}`,
+    },
+  });
+  return response.data.user;
+};
