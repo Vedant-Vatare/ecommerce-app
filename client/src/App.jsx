@@ -6,6 +6,7 @@ import Home from './components/pages/Home';
 import ProductsCollection from './components/pages/ProductCollection';
 import { Toaster } from '@/components/ui/sonner';
 import { LoginModal } from './components/ui/modal/LoginModal';
+const Signup = lazy(() => import('./components/pages/Signup'));
 const Cart = lazy(() => import('./components/pages/Cart'));
 const Checkout = lazy(() => import('./components/pages/Checkout'));
 const Shop = lazy(() => import('./components/pages/Shop'));
@@ -15,6 +16,7 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
+        <Route path="/auth/signup" element={<Signup />} />
         <Route path="/" element={<RootLayout />}>
           <Route index element={<Home />} />
           <Route path="/shop" element={<Shop />} />
