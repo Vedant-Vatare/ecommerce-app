@@ -14,6 +14,11 @@ export const verifyEmailCode = async ({ email, code }) => {
   return response.data;
 };
 
+export const loginUser = async ({ email, password }) => {
+  const response = await axios.post('/user/login', { email, password });
+  return response.data;
+};
+
 export const createUserAccount = async ({ password }) => {
   const response = await axios.post(
     '/user/create-user',

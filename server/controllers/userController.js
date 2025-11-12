@@ -63,16 +63,14 @@ export async function LoginUser(req, res) {
     });
 
     if (!user) {
-      return res
-        .status(401)
-        .json({ success: false, message: 'Invalid email or password' });
+      return res.status(401).json({
+        message: 'account with email is not registered',
+      });
     }
 
     const isPasswordValid = await compare(password, user.password);
     if (!isPasswordValid) {
-      return res
-        .status(401)
-        .json({ success: false, message: 'Invalid email or password' });
+      return res.status(401).json({ message: 'Invalid email or password' });
     }
     const token = jwt.sign(
       { userId: user.id, email: user.email },
@@ -80,14 +78,11 @@ export async function LoginUser(req, res) {
     );
 
     return res.status(200).json({
-      success: true,
       data: { id: user.id, email: user.email, token },
       message: 'Login successful',
     });
   } catch (error) {
-    return res
-      .status(500)
-      .json({ success: false, message: 'Internal Server Error' });
+    return res.status(500).json({ message: 'Internal Server Error' });
   }
 }
 
@@ -136,7 +131,7 @@ export async function sendVerificationCode(req, res) {
     where: { email },
   });
 
-  if (previousVerification?.createdAt > new Date(Date.now() - 2 * 60 * 1000)) {
+  if (previousVerification?.createdAt > new Date(Date.now() - 60 * 1000)) {
     return res.status(429).json({
       message: 'Please wait before requesting a new verification code.',
     });

@@ -4,10 +4,21 @@ import logo from '@/assets/logo.png';
 import { BorderTrail } from '../ui/border-trail';
 import { Button, buttonVariants } from '../ui/button';
 import { useCartQuery } from '@/hooks/cart';
-import { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const RootHeaderLayout = () => {
+  const navigate = useNavigate();
   const { data: cartItems } = useCartQuery();
+
+  const handleAccountClick = () => {
+    const token = localStorage.getItem('token');
+    if (token) {
+      navigate('/account');
+    } else {
+      navigate('/auth/login');
+    }
+  };
+
   return (
     <header className="sticky top-0 z-[999] bg-white shadow-md">
       <div className="flex h-14 w-full items-center justify-between px-3 md:gap-2">
@@ -53,7 +64,7 @@ const RootHeaderLayout = () => {
 
           <div className="flex items-center gap-3">
             <Link
-              to="/account"
+              to="/wishlist"
               className={`${buttonVariants({
                 variant: 'outline',
                 size: 'icon',
@@ -75,15 +86,15 @@ const RootHeaderLayout = () => {
               )}
               <ShoppingBagIcon className="h-5 w-5" />
             </Link>
-            <Link
-              to="/account"
+            <button
+              onClick={handleAccountClick}
               className={`${buttonVariants({
                 variant: 'outline',
                 size: 'icon',
-              })} bg-primary-foreground relative inline-flex aspect-square h-10 w-10 items-center justify-center p-0`}
+              })} bg-primary-foreground relative inline-flex aspect-square h-10 w-10 cursor-pointer items-center justify-center p-0`}
             >
               <User2 className="h-5 w-5" />
-            </Link>
+            </button>
           </div>
         </div>
       </div>

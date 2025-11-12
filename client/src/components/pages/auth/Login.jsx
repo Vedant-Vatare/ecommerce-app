@@ -13,9 +13,10 @@ import { Separator } from '@/components/ui/separator';
 import LoadingDots from '@/components/ui/LoadingDots';
 import { Phone } from 'lucide-react';
 import { Label } from '../../ui/label';
-import { sendEmailCodeMutation } from '@/hooks/auth';
+import { loginUserMutation } from '@/hooks/auth';
 import { toast } from 'sonner';
-import { useMailVerificationStore } from '@/store/userStore';
+import { EyeOff } from 'lucide-react';
+import { EyeIcon } from 'lucide-react';
 
 const GoogleIcon = () => (
   <svg
@@ -43,31 +44,27 @@ const GoogleIcon = () => (
   </svg>
 );
 
-export default function SignupPage({ isAsModal = false }) {
-  const { mutateAsync: sendEmailCode, isPending } = sendEmailCodeMutation();
+const Login = ({ isAsModal }) => {
   const navigate = useNavigate();
   const [email, setEmail] = useState('');
-  const setMail = useMailVerificationStore((state) => state.setEmail);
-
+  const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
+  const { mutateAsync: loginUser, isPending } = loginUserMutation();
   const handleSubmit = async () => {
     try {
-      await sendEmailCode(email);
-      toast.success('Verification code sent successfully!');
-      setMail(email);
-      navigate('/auth/verification');
-    } catch (error) {
-      if (error?.response?.status === 429) {
-        navigate('/auth/verification');
-        return;
-      }
+      const response = await loginUser({ email, password });
 
+      if (response?.data?.token) {
+        localStorage.setItem('token', response.data.token);
+      }
+      navigate('/');
+    } catch (error) {
       const message =
         error.response?.data?.message ||
-        'Failed to send verification code. Please try again.';
+        'Failed to login. Please try again later';
       toast.error(message);
     }
   };
-
   return (
     <div
       className={`md:bg-primary/5 relative flex items-center justify-center ${isAsModal ? 'h-full w-full' : 'h-[100dvh] md:p-4'}`}
@@ -75,7 +72,7 @@ export default function SignupPage({ isAsModal = false }) {
       <Card className="w-full max-w-md border-0 px-2 py-10 shadow-none outline-none">
         <CardHeader>
           <CardTitle className="font-heading text-center text-2xl font-semibold">
-            Create an account
+            Login to your account
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-6 px-3 md:px-6">
@@ -93,13 +90,36 @@ export default function SignupPage({ isAsModal = false }) {
               className="focus:ring-primary h-12 rounded-sm text-base"
             />
           </div>
+          <div>
+            <Label htmlFor="password" className="mb-1 text-sm font-medium">
+              password
+            </Label>
+            <div className="relative">
+              <Input
+                id="password"
+                type={showPassword ? 'text' : 'password'}
+                placeholder="Enter your password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className="focus:ring-primary h-12 rounded-sm text-base"
+              />
+              <Button
+                size={'icon'}
+                onClick={() => setShowPassword(!showPassword)}
+                variant={'ghost'}
+                className="absolute top-2 right-2 my-auto"
+              >
+                {showPassword ? <EyeOff /> : <EyeIcon />}
+              </Button>
+            </div>
+          </div>
 
           <Button
             onClick={handleSubmit}
             className="bg-primary h-12 w-full rounded-full text-base"
             disabled={!email}
           >
-            {isPending ? <LoadingDots /> : 'Continue'}
+            {isPending ? <LoadingDots /> : 'Login'}
           </Button>
 
           <div className="relative mt-3">
@@ -108,7 +128,7 @@ export default function SignupPage({ isAsModal = false }) {
             </div>
             <div className="relative flex justify-center text-sm">
               <span className="text-muted-foreground bg-white px-2">
-                or continue with
+                or login with
               </span>
             </div>
           </div>
@@ -126,16 +146,18 @@ export default function SignupPage({ isAsModal = false }) {
         </CardContent>
         <CardFooter className="flex flex-col space-y-2">
           <div className="text-muted-foreground text-center text-sm">
-            Already have an account?{' '}
+            Don't have an account?{' '}
             <Link
-              to="/login"
+              to="/auth/signup"
               className="text-primary font-medium hover:underline"
             >
-              Login
+              Signup
             </Link>
           </div>
         </CardFooter>
       </Card>
     </div>
   );
-}
+};
+
+export default Login;

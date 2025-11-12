@@ -9,6 +9,8 @@ import { LoginModal } from './components/ui/modal/LoginModal';
 import AuthHeader from './components/pages/auth/AuthHeader';
 import UserVerification from './components/pages/auth/UserVerification';
 import SetPassword from './components/pages/auth/SetupPassword';
+
+const Login = lazy(() => import('./components/pages/auth/Login'));
 const Signup = lazy(() => import('./components/pages/auth/Signup'));
 const Cart = lazy(() => import('./components/pages/Cart'));
 const Checkout = lazy(() => import('./components/pages/Checkout'));
@@ -21,6 +23,7 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route element={<AuthHeader />}>
+            <Route path="/auth/login" element={<Login />} />
             <Route path="/auth/signup" element={<Signup />} />
             <Route path="/auth/verification" element={<UserVerification />} />
             <Route path="/auth/setup-password" element={<SetPassword />} />

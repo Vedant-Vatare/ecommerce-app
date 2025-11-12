@@ -1,5 +1,6 @@
 import {
   createUserAccount,
+  loginUser,
   sendCodeToemail,
   verifyEmailCode,
 } from '@/services/auth';
@@ -19,6 +20,12 @@ export const verifyEmailMutation = () => {
   });
 };
 
+export const loginUserMutation = () => {
+  return useMutation({
+    mutationKey: ['login-user'],
+    mutationFn: ({ email, password }) => loginUser({ email, password }),
+  });
+};
 export const createUserAccountMutation = () => {
   return useMutation({
     mutationKey: ['create-user-account'],
