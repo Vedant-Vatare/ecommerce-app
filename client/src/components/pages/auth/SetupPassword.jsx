@@ -5,13 +5,38 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import LoadingDots from '@/components/ui/LoadingDots';
 import { EyeOff, EyeIcon } from 'lucide-react';
-
+import { createUserAccountMutation } from '@/hooks/auth';
+import { toast } from 'sonner';
+import { useNavigate } from 'react-router-dom';
+import { useEffect } from 'react';
 const SetupPassword = ({ isAsModal }) => {
+  const navigate = useNavigate();
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-
+  const { mutateAsync: createAccount, isPending } = createUserAccountMutation();
+  useEffect(() => {
+    const authtoken = localStorage.getItem('userauthtoken');
+    if (!authtoken) {
+      console.log('no auth token');
+      navigate('/auth/signup');
+    }
+  }, []);
+  const handleSubmit = async () => {
+    try {
+      const response = await createAccount({ password });
+      localStorage.removeItem('userauthtoken');
+      localStorage.removeItem('mail-verification-storage');
+      localStorage.setItem('token', response.token);
+      window.location.href = '/';
+    } catch (error) {
+      const message =
+        error.response?.data?.message ||
+        'Failed to set password. Please try again.';
+      toast.error(message);
+    }
+  };
   return (
     <div
       className={`md:bg-primary/5 relative flex items-center justify-center ${isAsModal ? 'h-full w-full' : 'h-[100dvh] md:p-4'}`}
@@ -74,10 +99,11 @@ const SetupPassword = ({ isAsModal }) => {
             </div>
           </div>
           <Button
+            onClick={handleSubmit}
             disabled={password.length < 6 || password !== confirmPassword}
             className="bg-primary h-12 w-full rounded-full text-base"
           >
-            {0 ? <LoadingDots /> : 'Create Account'}
+            {isPending ? <LoadingDots /> : 'Create Account'}
           </Button>
         </CardContent>
       </Card>

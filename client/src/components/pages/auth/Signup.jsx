@@ -7,13 +7,15 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 import { Link, useNavigate } from 'react-router-dom';
-import logo from '@/assets/logo.png';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import LoadingDots from '@/components/ui/LoadingDots';
 import { Phone } from 'lucide-react';
 import { Label } from '../../ui/label';
+import { sendEmailCodeMutation } from '@/hooks/auth';
+import { toast } from 'sonner';
+import { useMailVerificationStore } from '@/store/userStore';
 
 const GoogleIcon = () => (
   <svg
@@ -42,11 +44,28 @@ const GoogleIcon = () => (
 );
 
 export default function SignupPage({ isAsModal = false }) {
+  const { mutateAsync: sendEmailCode, isPending } = sendEmailCodeMutation();
   const navigate = useNavigate();
   const [email, setEmail] = useState('');
-  const handleRegister = () => {
-    console.log('Registering with:', { email });
-    navigate('/auth/verification');
+  const setMail = useMailVerificationStore((state) => state.setEmail);
+
+  const handleSubmit = async () => {
+    try {
+      await sendEmailCode(email);
+      toast.success('Verification code sent successfully!');
+      setMail(email);
+      navigate('/auth/verification');
+    } catch (error) {
+      if (error?.response?.status === 429) {
+        navigate('/auth/verification');
+        return;
+      }
+
+      const message =
+        error.response?.data?.message ||
+        'Failed to send verification code. Please try again.';
+      toast.error(message);
+    }
   };
 
   return (
@@ -76,11 +95,11 @@ export default function SignupPage({ isAsModal = false }) {
           </div>
 
           <Button
-            onClick={handleRegister}
+            onClick={handleSubmit}
             className="bg-primary h-12 w-full rounded-full text-base"
             disabled={!email}
           >
-            {0 ? <LoadingDots /> : 'Continue'}
+            {isPending ? <LoadingDots /> : 'Continue'}
           </Button>
 
           <div className="relative mt-3">

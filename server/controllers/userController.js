@@ -122,6 +122,16 @@ export async function sendVerificationCode(req, res) {
   if (!email || !z.email().safeParse(email).success) {
     return res.status(400).json({ message: 'A valid email is required.' });
   }
+  const isUserExists = await prisma.user.findUnique({
+    where: { email },
+  });
+
+  if (isUserExists) {
+    return res
+      .status(409)
+      .json({ message: 'User with this email already exists.' });
+  }
+
   const previousVerification = await prisma.userVerification.findUnique({
     where: { email },
   });

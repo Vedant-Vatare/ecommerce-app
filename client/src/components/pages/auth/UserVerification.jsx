@@ -17,15 +17,39 @@ import {
 import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
+import { verifyEmailMutation } from '@/hooks/auth';
+import { toast } from 'sonner';
+import { useMailVerificationStore } from '@/store/userStore';
+import { useEffect } from 'react';
+import LoadingDots from '@/components/ui/LoadingDots';
 
 const UserVerification = ({ isAsModal }) => {
+  const [code, setCode] = useState('');
   const navigate = useNavigate();
-  const handleClick = () => {
-    console.log('OTP entered:', otp);
-    navigate('/auth/setup-password');
+  const { mutateAsync: verifyEmailCode, isPending } = verifyEmailMutation();
+  const email = useMailVerificationStore((state) => state.email);
+
+  useEffect(() => {
+    if (!email) {
+      toast.error('No email found for verification.');
+      navigate('/auth/signup');
+    }
+  }, []);
+
+  const handleSubmit = async () => {
+    try {
+      const response = await verifyEmailCode({ email, code });
+      localStorage.setItem('userauthtoken', response.userAuthToken);
+      navigate('/auth/setup-password');
+    } catch (error) {
+      console.log(error);
+      const message =
+        error.response?.data?.message ||
+        'Failed to verify code. Please try again.';
+      toast.error(message);
+    }
   };
-  const [otp, setOtp] = useState('1232');
-  const [otpSent, setOtpSent] = useState(false);
+
   return (
     <div
       className={`md:bg-primary/5 relative flex items-center justify-center ${isAsModal ? 'h-full w-full' : 'h-[100dvh] md:p-4'}`}
@@ -45,7 +69,7 @@ const UserVerification = ({ isAsModal }) => {
               Verification Code
             </Label>
 
-            <InputOTP id={'otp'} maxLength={6} value={otp} onChange={setOtp}>
+            <InputOTP id={'otp'} maxLength={6} value={code} onChange={setCode}>
               <InputOTPGroup>
                 <InputOTPSlot index={0} />
                 <InputOTPSlot index={1} />
@@ -60,11 +84,11 @@ const UserVerification = ({ isAsModal }) => {
             </InputOTP>
           </div>
           <Button
-            onClick={handleClick}
-            disabled={otp.length < 6}
+            onClick={handleSubmit}
+            disabled={code.length < 6}
             className="bg-primary h-12 w-full rounded-full text-base"
           >
-            {0 ? <LoadingDots /> : 'Continue'}
+            {isPending ? <LoadingDots /> : 'Continue'}
           </Button>
         </CardContent>
         <div className="mx-auto w-[75vw] max-w-[75%]">

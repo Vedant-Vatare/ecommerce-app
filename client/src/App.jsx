@@ -8,7 +8,7 @@ import { Toaster } from '@/components/ui/sonner';
 import { LoginModal } from './components/ui/modal/LoginModal';
 import AuthHeader from './components/pages/auth/AuthHeader';
 import UserVerification from './components/pages/auth/UserVerification';
-import SetPassword from './components/pages/auth/SetPassword';
+import SetPassword from './components/pages/auth/SetupPassword';
 const Signup = lazy(() => import('./components/pages/auth/Signup'));
 const Cart = lazy(() => import('./components/pages/Cart'));
 const Checkout = lazy(() => import('./components/pages/Checkout'));
@@ -41,7 +41,7 @@ function App() {
         </Routes>
       </BrowserRouter>
       <LoginModal />
-      <Toaster position="top" />
+      <Toaster position="top-center" />
     </>
   );
 }
