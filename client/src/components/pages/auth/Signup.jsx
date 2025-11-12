@@ -2,24 +2,18 @@ import React, { useState } from 'react';
 import {
   Card,
   CardContent,
-  CardDescription,
   CardFooter,
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import { Link } from 'react-router-dom';
-import {
-  InputOTP,
-  InputOTPGroup,
-  InputOTPSeparator,
-  InputOTPSlot,
-} from '@/components/ui/input-otp';
+import { Link, useNavigate } from 'react-router-dom';
 import logo from '@/assets/logo.png';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import LoadingDots from '@/components/ui/LoadingDots';
 import { Phone } from 'lucide-react';
+import { Label } from '../../ui/label';
 
 const GoogleIcon = () => (
   <svg
@@ -47,72 +41,46 @@ const GoogleIcon = () => (
   </svg>
 );
 
-export default function SignupPage() {
+export default function SignupPage({ isAsModal = false }) {
+  const navigate = useNavigate();
   const [email, setEmail] = useState('');
-  const [otp, setOtp] = useState('1232');
-  const [otpSent, setOtpSent] = useState(false);
   const handleRegister = () => {
-    console.log('Registering with:', { email, otp });
+    console.log('Registering with:', { email });
+    navigate('/auth/verification');
   };
 
   return (
-    <div className="md:bg-primary/5 flex h-[100dvh] items-center justify-center md:p-4">
-      <Card className="w-full max-w-md border-0 py-10 shadow-none outline-none md:px-2">
+    <div
+      className={`md:bg-primary/5 relative flex items-center justify-center ${isAsModal ? 'h-full w-full' : 'h-[100dvh] md:p-4'}`}
+    >
+      <Card className="w-full max-w-md border-0 px-2 py-10 shadow-none outline-none">
         <CardHeader>
-          <div className="flex justify-center">
-            <Link to="/">
-              <img
-                className="h-10 object-contain"
-                src={logo}
-                alt="Sticker studio"
-              />
-            </Link>
-          </div>
           <CardTitle className="font-heading text-center text-2xl font-semibold">
             Create an account
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-6 px-3 md:px-6">
-          <Input
-            id="email"
-            type="email"
-            placeholder="name@gmail.com"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            className="focus:ring-primary h-12 rounded-sm text-base"
-          />
-
-          <div className="flex w-full items-center justify-between gap-2">
-            <InputOTP maxLength={6} value={otp} onChange={setOtp}>
-              <InputOTPGroup>
-                <InputOTPSlot index={0} />
-                <InputOTPSlot index={1} />
-                <InputOTPSlot index={2} />
-              </InputOTPGroup>
-              <InputOTPSeparator />
-              <InputOTPGroup>
-                <InputOTPSlot index={3} />
-                <InputOTPSlot index={4} />
-                <InputOTPSlot index={5} />
-              </InputOTPGroup>
-            </InputOTP>
-
-            <Button
-              variant={'ghost'}
-              disabled={!email || otpSent}
-              onClick={() => setOtpSent(true)}
-              className="hover:outline-primary whitespace-nowrap hover:outline"
-            >
-              {otpSent ? 'Sent' : 'Get Code'}
-            </Button>
+          <div>
+            <Label htmlFor="email" className="mb-1 text-sm font-medium">
+              Email
+            </Label>
+            <Input
+              id="email"
+              type="email"
+              autoComplete="email"
+              placeholder="name@gmail.com"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              className="focus:ring-primary h-12 rounded-sm text-base"
+            />
           </div>
 
           <Button
             onClick={handleRegister}
             className="bg-primary h-12 w-full rounded-full text-base"
-            disabled={!email || !otp}
+            disabled={!email}
           >
-            {email && otp ? <LoadingDots /> : 'Create Account'}
+            {0 ? <LoadingDots /> : 'Continue'}
           </Button>
 
           <div className="relative mt-3">
@@ -140,12 +108,12 @@ export default function SignupPage() {
         <CardFooter className="flex flex-col space-y-2">
           <div className="text-muted-foreground text-center text-sm">
             Already have an account?{' '}
-            <a
-              href="/login"
+            <Link
+              to="/login"
               className="text-primary font-medium hover:underline"
             >
               Login
-            </a>
+            </Link>
           </div>
         </CardFooter>
       </Card>

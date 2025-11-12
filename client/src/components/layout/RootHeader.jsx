@@ -4,6 +4,7 @@ import logo from '@/assets/logo.png';
 import { BorderTrail } from '../ui/border-trail';
 import { Button, buttonVariants } from '../ui/button';
 import { useCartQuery } from '@/hooks/cart';
+import { useEffect } from 'react';
 
 const RootHeaderLayout = () => {
   const { data: cartItems } = useCartQuery();
@@ -68,7 +69,7 @@ const RootHeaderLayout = () => {
               })} bg-primary-foreground relative inline-flex aspect-square h-10 w-10 items-center justify-center p-0`}
             >
               {!isNaN(cartItems?.length) && cartItems.length > 0 && (
-                <span className="bg-primary text-info absolute -top-2 -right-2 flex h-6 w-6 items-center justify-center rounded-full font-sans text-xs font-semibold text-white">
+                <span className="bg-primary absolute -top-2 -right-2 flex h-6 w-6 items-center justify-center rounded-full font-sans text-xs font-semibold text-white">
                   {cartItems.length}
                 </span>
               )}
