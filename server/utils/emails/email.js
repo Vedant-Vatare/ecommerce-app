@@ -32,7 +32,6 @@ export async function sendEmailVerification(toEmail) {
     };
 
     const response = await apiInstance.sendTransacEmail(sendSmtpEmail);
-    console.log('Email sent successfully:', response);
     return { response, code, success: true };
   } catch (error) {
     console.error('Failed to send email:', error);

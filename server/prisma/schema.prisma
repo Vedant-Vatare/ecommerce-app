@@ -53,7 +53,7 @@ model UserAddress {
   state     String
   country   String?
   pincode   String
-  user      User     @relation(fields: [userId], references: [id])
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   isDefault Boolean? @default(false)

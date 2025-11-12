@@ -3,12 +3,21 @@ import { hash, compare } from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import { z } from 'zod';
 import { sendEmailVerification } from '../utils/emails/email.js';
+
 export async function createUser(req, res) {
   try {
+    if (!req.body.password || !req.headers['userauthtoken']) {
+      return res.status(401).json({ message: 'Invalid user credentials' });
+    }
+    const payload = jwt.verify(
+      req.headers['userauthtoken'],
+      process.env.JWT_SECRET,
+    );
+
     const hashedPassword = await hash(req.body.password, 10);
     const user = await prisma.user.create({
       data: {
-        email: req.body.email,
+        email: payload.email,
         password: hashedPassword,
       },
       select: {
@@ -22,11 +31,19 @@ export async function createUser(req, res) {
     );
     return res.status(201).json({
       success: true,
-      data: { user, token },
+      user,
+      token,
       message: 'User created successfully',
     });
   } catch (error) {
-    if (error.code === 'P2002') {
+    if (error?.name === 'JsonWebTokenError') {
+      return res.status(401).json({ message: 'Invalid user credentials' });
+    }
+    if (error?.name === 'TokenExpiredError') {
+      return res.status(401).json({ message: 'token expired' });
+    }
+
+    if (error?.code === 'P2002') {
       return res
         .status(401)
         .json({ success: false, message: 'user with email already exists' });
@@ -105,13 +122,26 @@ export async function sendVerificationCode(req, res) {
   if (!email || !z.email().safeParse(email).success) {
     return res.status(400).json({ message: 'A valid email is required.' });
   }
+  const previousVerification = await prisma.userVerification.findUnique({
+    where: { email },
+  });
+
+  if (previousVerification?.createdAt > new Date(Date.now() - 2 * 60 * 1000)) {
+    return res.status(429).json({
+      message: 'Please wait before requesting a new verification code.',
+    });
+  }
+
+  if (previousVerification) {
+    await prisma.userVerification.delete({ where: { email } });
+  }
+
   const { success, code } = await sendEmailVerification(email);
   if (!success) {
     return res
       .status(500)
       .json({ message: 'Failed to send verification code.' });
   }
-  await prisma.userVerification.deleteMany({ where: { email } });
 
   await prisma.userVerification.create({
     data: {
@@ -120,6 +150,7 @@ export async function sendVerificationCode(req, res) {
       expiresAt: new Date(Date.now() + 15 * 60 * 1000),
     },
   });
+
   return res.status(200).json({
     message: 'Verification code sent successfully.',
   });
@@ -127,25 +158,35 @@ export async function sendVerificationCode(req, res) {
 
 export async function verifyEmailCode(req, res) {
   const { email, code } = req.query;
-  if (!email || !code) {
+  const { success } = z
+    .object({
+      email: z.email(),
+      code: z.string().length(6),
+    })
+    .safeParse({ email, code });
+  if (!success) {
     return res
       .status(400)
       .json({ message: 'Email and verification code are required.' });
   }
 
-  const record = await prisma.userVerification.findFirst({
-    where: { email, verificationCode: code },
+  const user = await prisma.userVerification.findUnique({
+    where: { email },
   });
 
-  if (!record || record.expiresAt < new Date()) {
+  if (!user || user.verificationCode !== code || user.expiresAt < new Date()) {
     return res
       .status(400)
       .json({ message: 'Invalid or expired verification code.' });
   }
-
-  return res.status(200).json({ message: 'Email verified successfully.' });
+  await prisma.userVerification.delete({ where: { email } });
+  const userAuthToken = jwt.sign({ email }, process.env.JWT_SECRET, {
+    expiresIn: '15min',
+  });
+  return res
+    .status(200)
+    .json({ message: 'Email verified successfully.', userAuthToken });
 }
-
 export async function getUserProfile(req, res) {
   const user = await prisma.user.findUnique({
     where: { id: req.userId },

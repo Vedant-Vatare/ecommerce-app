@@ -62,5 +62,6 @@ router.delete(
 
 router.get('/send-verification-code/', asyncHandler(sendVerificationCode));
 router.get('/verify-email-code/', asyncHandler(verifyEmailCode));
+router.post('/create-user', asyncHandler(createUser));
 
 export default router;
