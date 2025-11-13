@@ -6,10 +6,12 @@ import Home from './components/pages/Home';
 import ProductsCollection from './components/pages/ProductCollection';
 import { Toaster } from '@/components/ui/sonner';
 import { LoginModal } from './components/ui/modal/LoginModal';
-import AuthHeader from './components/pages/auth/AuthHeader';
-import UserVerification from './components/pages/auth/UserVerification';
-import SetPassword from './components/pages/auth/SetupPassword';
+const AuthHeader = lazy(() => import('./components/pages/auth/AuthHeader'));
+const UserVerification = lazy(
+  () => import('./components/pages/auth/UserVerification'),
+);
 
+const SetPassword = lazy(() => import('./components/pages/auth/SetupPassword'));
 const Login = lazy(() => import('./components/pages/auth/Login'));
 const Signup = lazy(() => import('./components/pages/auth/Signup'));
 const Cart = lazy(() => import('./components/pages/Cart'));

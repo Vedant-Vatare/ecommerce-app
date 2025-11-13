@@ -13,11 +13,25 @@ export const useLoginModal = create((set) => ({
 export const useMailVerificationStore = create(
   persist(
     (set) => ({
-      email: '',
-      setEmail: (email) => set({ email }),
+      verificationEmail: '',
+      setVerificationEmail: (email) => set({ verificationEmail: email }),
     }),
     {
       name: 'mail-verification-storage',
+    },
+  ),
+);
+
+export const useAuthTimeoutStore = create(
+  persist(
+    (set) => ({
+      timeout: null,
+      setResendTimeout: () =>
+        set({ timeout: new Date(Date.now() + 60 * 1000) }),
+      clearResendTimeout: () => set({ timeout: null }),
+    }),
+    {
+      name: 'verification-timeout',
     },
   ),
 );

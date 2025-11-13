@@ -11,11 +11,11 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import LoadingDots from '@/components/ui/LoadingDots';
-import { Phone } from 'lucide-react';
+import { SmartphoneIcon } from 'lucide-react';
 import { Label } from '../../ui/label';
 import { sendEmailCodeMutation } from '@/hooks/auth';
 import { toast } from 'sonner';
-import { useMailVerificationStore } from '@/store/userStore';
+import { motion } from 'motion/react';
 
 const GoogleIcon = () => (
   <svg
@@ -43,17 +43,16 @@ const GoogleIcon = () => (
   </svg>
 );
 
-export default function SignupPage({ isAsModal = false }) {
+export const SignupPage = () => {
   const { mutateAsync: sendEmailCode, isPending } = sendEmailCodeMutation();
   const navigate = useNavigate();
   const [email, setEmail] = useState('');
-  const setMail = useMailVerificationStore((state) => state.setEmail);
 
   const handleSubmit = async () => {
     try {
       await sendEmailCode(email);
+
       toast.success('Verification code sent successfully!');
-      setMail(email);
       navigate('/auth/verification');
     } catch (error) {
       if (error?.response?.status === 429) {
@@ -69,73 +68,80 @@ export default function SignupPage({ isAsModal = false }) {
   };
 
   return (
-    <div
-      className={`md:bg-primary/5 relative flex items-center justify-center ${isAsModal ? 'h-full w-full' : 'h-[100dvh] md:p-4'}`}
-    >
-      <Card className="w-full max-w-md border-0 px-2 py-10 shadow-none outline-none">
-        <CardHeader>
-          <CardTitle className="font-heading text-center text-2xl font-semibold">
-            Create an account
-          </CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-6 px-3 md:px-6">
-          <div>
-            <Label htmlFor="email" className="mb-1 text-sm font-medium">
-              Email
-            </Label>
-            <Input
-              id="email"
-              type="email"
-              autoComplete="email"
-              placeholder="name@gmail.com"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="focus:ring-primary h-12 rounded-sm text-base"
-            />
-          </div>
-
-          <Button
-            onClick={handleSubmit}
-            className="bg-primary h-12 w-full rounded-full text-base"
-            disabled={!email}
-          >
-            {isPending ? <LoadingDots /> : 'Continue'}
-          </Button>
-
-          <div className="relative mt-3">
-            <div className="absolute inset-0 flex items-center">
-              <Separator />
+    <div className="md:bg-primary/5 relative flex h-[100dvh] w-full items-center justify-center md:p-4">
+      <motion.div
+        className="w-full max-w-md"
+        initial={{ opacity: 0, x: 20 }}
+        animate={{ opacity: 1, x: 0 }}
+        transition={{ duration: 0.4 }}
+      >
+        <Card className="relative w-full max-w-md border-0 px-2 py-10 shadow-none outline-none">
+          <CardHeader>
+            <CardTitle className="font-heading text-center text-2xl font-semibold">
+              Create an account
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-6 px-3 md:px-6">
+            <div>
+              <Label htmlFor="email" className="mb-1 text-sm font-medium">
+                Email
+              </Label>
+              <Input
+                id="email"
+                type="email"
+                autoComplete="email"
+                placeholder="name@gmail.com"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className="focus:ring-primary h-12 rounded-sm text-base"
+              />
             </div>
-            <div className="relative flex justify-center text-sm">
-              <span className="text-muted-foreground bg-white px-2">
-                or continue with
-              </span>
-            </div>
-          </div>
 
-          <div className="grid grid-cols-2 gap-3">
-            <Button variant="outline" className="h-12 w-full">
-              <Phone className="mr-2 h-5 w-5" />
-              Phone
-            </Button>
-            <Button variant="outline" className="h-12 w-full">
-              <GoogleIcon />
-              <span className="ml-2">Google</span>
-            </Button>
-          </div>
-        </CardContent>
-        <CardFooter className="flex flex-col space-y-2">
-          <div className="text-muted-foreground text-center text-sm">
-            Already have an account?{' '}
-            <Link
-              to="/login"
-              className="text-primary font-medium hover:underline"
+            <Button
+              onClick={handleSubmit}
+              className="bg-primary h-12 w-full rounded-full text-base"
+              disabled={!email}
             >
-              Login
-            </Link>
-          </div>
-        </CardFooter>
-      </Card>
+              {isPending ? <LoadingDots /> : 'Continue'}
+            </Button>
+
+            <div className="relative mt-3">
+              <div className="absolute inset-0 flex items-center">
+                <Separator />
+              </div>
+              <div className="relative flex justify-center text-sm">
+                <span className="text-muted-foreground bg-white px-2">
+                  or continue with
+                </span>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-2 gap-3">
+              <Button variant="outline" className="h-12 w-full">
+                <SmartphoneIcon className="mr-2 h-5 w-5" />
+                Phone
+              </Button>
+              <Button variant="outline" className="h-12 w-full">
+                <GoogleIcon />
+                <span className="ml-2">Google</span>
+              </Button>
+            </div>
+          </CardContent>
+          <CardFooter className="flex flex-col space-y-2">
+            <div className="text-muted-foreground text-center text-sm">
+              Already have an account?{' '}
+              <Link
+                to="/auth/login"
+                className="text-primary font-medium hover:underline"
+              >
+                Login
+              </Link>
+            </div>
+          </CardFooter>
+        </Card>
+      </motion.div>
     </div>
   );
-}
+};
+
+export default SignupPage;

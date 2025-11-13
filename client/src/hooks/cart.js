@@ -9,6 +9,7 @@ import {
 export const useCartQuery = () => {
   return useQuery({
     queryKey: ['cart'],
+    enabled: !!localStorage.getItem('token'),
     queryFn: fetchUserCart,
     staleTime: Infinity,
   });
@@ -46,8 +47,6 @@ export const useAddToCartQuery = () => {
     },
 
     onError: (error, product, context) => {
-      console.log({ error });
-
       if (context?.previousCart) {
         queryClient.setQueryData(['cart'], context.previousCart);
       }
@@ -101,7 +100,6 @@ export const useDeleteCartItemQuery = () => {
     },
 
     onError: (error, cartItemId, context) => {
-      console.log('error removing cart item:', error);
       if (context?.previousCart) {
         queryClient.setQueryData(['cart'], context.previousCart);
       }
